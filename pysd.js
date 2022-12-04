@@ -1,16 +1,22 @@
 /**
  * Plugin for creating pysd models in drawio.
+ *
+ * - Create custom mxcells for pysd
+ * - Helps writing equations
+ * - Double click opens equation menu
+ * - Automatically design the cells
+ *
+ *
  */
-Draw.loadPlugin(function (ui)
-{
+Draw.loadPlugin(function (ui) {
 
-	function createPysdCell()
-	{
+	function createPysdCell() {
 		var cell = new mxCell('%Name%', new mxGeometry(0, 0, 80, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
 		cell.vertex = true;
 		ui.sidebar.graph.setAttributeForCell(cell, 'placeholders', '1');
 		ui.sidebar.graph.setAttributeForCell(cell, 'Name', 'new_variable');
 		ui.sidebar.graph.setAttributeForCell(cell, 'Doc', '');
+		ui.sidebar.graph.setAttributeForCell(cell, 'Units', '-');
 		return cell;
 	}
 	var template_cell = createPysdCell();
@@ -19,8 +25,7 @@ Draw.loadPlugin(function (ui)
 	if (ui.sidebar != null) {
 		var fns = [
 			ui.sidebar.createVertexTemplateEntry('shape=image;image=https://raw.githubusercontent.com/SDXorg/pysd/master/docs/images/PySD_Logo.svg;editable=0;resizable=1;movable=1;rotatable=0', 100, 100, '', 'PySD Logo', null, null, 'text heading title'),
-			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function ()
-			{
+			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
 				var cell = createPysdCell();
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Variable');
 			})),
@@ -69,8 +74,7 @@ Draw.loadPlugin(function (ui)
 		var graph = ui.editor.graph;
 		var graphGetGlobalVariable = graph.getGlobalVariable;
 
-		graph.getGlobalVariable = function (name)
-		{
+		graph.getGlobalVariable = function (name) {
 			if (name == 'today') {
 				return new Date().toLocaleString();
 			}
@@ -86,8 +90,7 @@ Draw.loadPlugin(function (ui)
 		// Adds support for exporting PDF with placeholders
 		var graphGetExportVariables = graph.getExportVariables;
 
-		Graph.prototype.getExportVariables = function ()
-		{
+		Graph.prototype.getExportVariables = function () {
 			var vars = graphGetExportVariables.apply(this, arguments);
 			var file = ui.getCurrentFile();
 
@@ -101,15 +104,13 @@ Draw.loadPlugin(function (ui)
 		mxResources.parse('helloWorldAction=Hello, World!');
 
 		// Adds action
-		ui.actions.addAction('helloWorldAction', function ()
-		{
+		ui.actions.addAction('helloWorldAction', function () {
 			var ran = Math.floor((Math.random() * 100) + 1);
 			mxUtils.alert('A random number is ' + ran);
 		});
 
 		// Adds menu
-		ui.menubar.addMenu('Hello, World Menu', function (menu, parent)
-		{
+		ui.menubar.addMenu('Hello, World Menu', function (menu, parent) {
 			ui.menus.addMenuItem(menu, 'helloWorldAction');
 		});
 
@@ -127,13 +128,16 @@ Draw.loadPlugin(function (ui)
 	}
 });
 
+// Keep int track all the variables and their elements
+var variables_dict = {};
+Draw.loadPlugin(function (ui) {
 
+});
 /**
  * Constructs a new equation dialog.
  * This is taken from drawio EditDataDialog and moodi
  */
-var EquationDialog = function (ui, cell)
-{
+var EquationDialog = function (ui, cell) {
 	var div = document.createElement('div');
 	var graph = ui.editor.graph;
 
@@ -161,19 +165,24 @@ var EquationDialog = function (ui, cell)
 	}
 
 	// Creates the dialog contents
-	var form = new mxForm('properties');
-	form.table.style.width = '100%';
+	var propertiesForm = new mxForm('properties');
+	propertiesForm.table.style.width = '100%';
+
+	var variablesForm = new mxForm('properties');
+	variablesForm.table.style.width = '100%';
 
 	var attrs = value.attributes;
 	var names = [];
 	var texts = [];
 	var count = 0;
+	var variable_names = [];
+	var variable_texts = [];
+	var variable_count = 0;
 
 	var id = (EditDataDialog.getDisplayIdForCell != null) ?
 		EditDataDialog.getDisplayIdForCell(ui, cell) : null;
 
-	var addRemoveButton = function (text, name)
-	{
+	var addRemoveButton = function (text, name, form) {
 		var wrapper = document.createElement('div');
 		wrapper.style.position = 'relative';
 		wrapper.style.paddingRight = '20px';
@@ -196,50 +205,67 @@ var EquationDialog = function (ui, cell)
 		removeAttr.style.height = '9px';
 		removeAttr.style.cursor = 'pointer';
 		removeAttr.appendChild(img);
-		/*
-				var removeAttrFn = (function (name)
-				{
-					return function ()
-					{
-						var count = 0;
 
-						for (var j = 0; j < names.length; j++) {
-							if (names[j] == name) {
-								texts[j] = null;
-								form.table.deleteRow(count + ((id != null) ? 1 : 0));
+		var removeAttrFn = (function (name) {
+			return function () {
+				var count = 0;
 
-								break;
-							}
+				for (var j = 0; j < names.length; j++) {
+					if (names[j] == name) {
+						texts[j] = null;
+						form.table.deleteRow(count + ((id != null) ? 1 : 0));
 
-							if (texts[j] != null) {
-								count++;
-							}
-						}
-					};
-				})(name);
+						break;
+					}
 
-				mxEvent.addListener(removeAttr, 'click', removeAttrFn); */
+					if (texts[j] != null) {
+						count++;
+					}
+				}
+			};
+		})(name);
+
+		mxEvent.addListener(removeAttr, 'click', removeAttrFn);
 
 		var parent = text.parentNode;
 		wrapper.appendChild(text);
-		// wrapper.appendChild(removeAttr);
+		wrapper.appendChild(removeAttr);
 		parent.appendChild(wrapper);
 	};
 
-	var addTextArea = function (index, name, value)
-	{
+	var addTextArea = function (index, name, value) {
 		names[index] = name;
-		texts[index] = form.addTextarea(names[count] + ':', value, 2);
+		texts[index] = propertiesForm.addTextarea(names[count] + ':', value, 2);
 		texts[index].style.width = '100%';
 
 		if (value.indexOf('\n') > 0) {
 			texts[index].setAttribute('rows', '2');
 		}
 
-		addRemoveButton(texts[index], name);
+		// addRemoveButton(texts[index], name, propertiesForm);
 
 		if (meta[name] != null && meta[name].editable == false) {
 			texts[index].setAttribute('disabled', 'disabled');
+		}
+	};
+
+	// area containing the the variables
+	var addVariables = function (index, cell) {
+		// TODO change that and make buttons instead
+		var name = cell.getAttribute('Name', 'new_variable');
+		var value = cell.getAttribute('Name', 'new_variable');
+		variable_names[index] = name;
+		variable_texts[index] = variablesForm.addTextarea(variable_names[variable_count] + ':', value, 2);
+		variable_texts[index].style.width = '100%';
+
+		if (value.indexOf('\n') > 0) {
+			variable_texts[index].setAttribute('rows', '2');
+		}
+
+		// addRemoveButton(variable_texts[index], name, variablesForm);
+
+		if (meta[name] != null && meta[name].editable == false) {
+			variable_texts[index].setAttribute('disabled', 'disabled');
 		}
 	};
 
@@ -254,18 +280,18 @@ var EquationDialog = function (ui, cell)
 	}
 
 	// Sorts by name
-	temp.sort(function (a, b)
-	{
-		if (a.name < b.name) {
-			return -1;
-		}
-		else if (a.name > b.name) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
-	});
+	/* 	temp.sort(function (a, b)
+		{
+			if (a.name < b.name) {
+				return -1;
+			}
+			else if (a.name > b.name) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}); */
 
 	if (id != null) {
 		var text = document.createElement('div');
@@ -274,13 +300,11 @@ var EquationDialog = function (ui, cell)
 		text.style.textAlign = 'center';
 		mxUtils.write(text, id);
 
-		var idInput = form.addField(mxResources.get('id') + ':', text);
+		var idInput = propertiesForm.addField(mxResources.get('id') + ':', text);
 
-		mxEvent.addListener(text, 'dblclick', function (evt)
-		{
+		mxEvent.addListener(text, 'dblclick', function (evt) {
 			if (mxEvent.isShiftDown(evt)) {
-				var dlg = new FilenameDialog(ui, id, mxResources.get('apply'), mxUtils.bind(this, function (value)
-				{
+				var dlg = new FilenameDialog(ui, id, mxResources.get('apply'), mxUtils.bind(this, function (value) {
 					if (value != null && value.length > 0 && value != id) {
 						if (graph.getModel().getCell(value) == null) {
 							graph.getModel().cellRemoved(cell);
@@ -303,11 +327,39 @@ var EquationDialog = function (ui, cell)
 	}
 
 	for (var i = 0; i < temp.length; i++) {
+		mxLog.info("asdf");
 		addTextArea(count, temp[i].name, temp[i].value);
 		count++;
 	}
 
-	var top = document.createElement('div');
+	function getChildrenOfCell(cell){
+		if(cell != undefined){
+			let children = [];
+			let edges = cell.edges;
+			if(edges != null){
+				for(let i = 0; i < edges.length; i++){
+					if(edges[i].target.value == cell.value){
+						let cellCopy = edges[i].source.clone();
+						children.push(cellCopy);
+					}
+				}
+			}
+			return children;
+		}
+		else{
+			return [];
+		}
+		}
+
+	var parents = getChildrenOfCell(cell);
+
+	for (var i = 0; i < parents.length; i++) {
+		addVariables(variable_count, parents[i]);
+		variable_count++;
+	}
+
+
+	var top = document.createElement('section');
 	top.style.position = 'absolute';
 	top.style.top = '30px';
 	top.style.left = '30px';
@@ -315,7 +367,8 @@ var EquationDialog = function (ui, cell)
 	top.style.bottom = '80px';
 	top.style.overflowY = 'auto';
 
-	top.appendChild(form.table);
+	top.appendChild(propertiesForm.table);
+	top.appendChild(variablesForm.table);
 
 	// var newProp = document.createElement('div');
 	// newProp.style.boxSizing = 'border-box';
@@ -359,7 +412,7 @@ var EquationDialog = function (ui, cell)
 	// 				}
 
 	// 				names.push(name);
-	// 				var text = form.addTextarea(name + ':', '', 2);
+	// 				var text = propertiesForm.addTextarea(name + ':', '', 2);
 	// 				text.style.width = '100%';
 	// 				texts.push(text);
 	// 				addRemoveButton(text, name);
@@ -386,8 +439,7 @@ var EquationDialog = function (ui, cell)
 	// 	}
 	// });
 
-	this.init = function ()
-	{
+	this.init = function () {
 		if (texts.length > 0) {
 			texts[0].focus();
 		}
@@ -406,8 +458,7 @@ var EquationDialog = function (ui, cell)
 	// addBtn.className = 'geBtn';
 	// newProp.appendChild(addBtn);
 
-	var cancelBtn = mxUtils.button(mxResources.get('cancel'), function ()
-	{
+	var cancelBtn = mxUtils.button(mxResources.get('cancel'), function () {
 		ui.hideDialog.apply(ui, arguments);
 	});
 
@@ -415,8 +466,7 @@ var EquationDialog = function (ui, cell)
 	cancelBtn.setAttribute('title', 'Escape');
 	cancelBtn.className = 'geBtn';
 
-	var applyBtn = mxUtils.button(mxResources.get('apply'), function ()
-	{
+	var applyBtn = mxUtils.button(mxResources.get('apply'), function () {
 		try {
 			ui.hideDialog.apply(ui, arguments);
 
@@ -451,8 +501,7 @@ var EquationDialog = function (ui, cell)
 	applyBtn.setAttribute('title', 'Ctrl+Enter');
 	applyBtn.className = 'geBtn gePrimaryBtn';
 
-	mxEvent.addListener(div, 'keypress', function (e)
-	{
+	mxEvent.addListener(div, 'keypress', function (e) {
 		if (e.keyCode == 13 && mxEvent.isControlDown(e)) {
 			applyBtn.click();
 		}
@@ -488,8 +537,7 @@ var EquationDialog = function (ui, cell)
 			input.defaultChecked = true;
 		}
 
-		mxEvent.addListener(input, 'click', function ()
-		{
+		mxEvent.addListener(input, 'click', function () {
 			if (value.getAttribute('placeholders') == '1') {
 				value.removeAttribute('placeholders');
 			}
@@ -539,14 +587,12 @@ var EquationDialog = function (ui, cell)
 };
 
 // Checks when a cell is clicked
-Draw.loadPlugin(function (ui)
-{
+Draw.loadPlugin(function (ui) {
 
 	var graph = ui.editor.graph;
 
 	// Add a show equation dialog
-	ui.showEquationDialog = function (cell)
-	{
+	ui.showEquationDialog = function (cell) {
 		null != cell
 			&& (
 				cell = new EquationDialog(this, cell),
@@ -556,8 +602,7 @@ Draw.loadPlugin(function (ui)
 			)
 	};
 
-	function updateOverlays(cell)
-	{
+	function updateOverlays(cell) {
 		if (cell != null) {
 			ui.showEquationDialog(cell);
 
@@ -567,8 +612,7 @@ Draw.loadPlugin(function (ui)
 
 	// Check the click handler
 	var dblClick = ui.editor.graph.dblClick
-	ui.editor.graph.dblClick = function (evt, cell)
-	{
+	ui.editor.graph.dblClick = function (evt, cell) {
 		if (cell != null) {
 			updateOverlays(cell);
 		} else {
