@@ -29,7 +29,15 @@ This seems to be tricky to do directly in drawio. An option
 would be create a branch from the main drawio dedicated to writing 
 SD programs. 
 
+### Plugins with drawio
+
+plugins can be added to drawio in a quite easily fashion.
+One should understand javascript and how electron works.
+
+Example can be found at https://github.com/jgraph/drawio/tree/dev/src/main/webapp/plugins 
+
 ## Conclusion
 
-Creating a fork of drawio adding functionality for SD seems like a promising solution.
-One could also add direct conversion to pysd and export to python model.
+Creating a fork of drawio adding functionality for SD seems like a too complex solution.
+One should simply create one or many plugins that take care of that.
+One shouuld also add direct conversion to pysd and export to python model.
