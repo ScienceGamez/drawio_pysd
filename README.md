@@ -32,7 +32,7 @@ This seems to be tricky to do directly in drawio. An option
 would be create a branch from the main drawio dedicated to writing 
 SD programs. 
 
-### Plugins with drawio
+## Plugins with drawio
 
 plugins can be added to drawio in a quite easily fashion.
 One should understand javascript and how electron works.
@@ -40,6 +40,16 @@ One should understand javascript and how electron works.
 Example can be found at https://github.com/jgraph/drawio/tree/dev/src/main/webapp/plugins 
 
 The plugin can simply be imported in drawio.
+
+### Location of the plugin file
+
+Once you load the plugin for the first time on the menu, it will be loaded to:
+
+On linux if you installed with snap: 
+
+~/snap/drawio/current/.config/draw.io/plugins
+
+Then you can modify the plugin file directly there so you don't need to load it every time. 
 
 ## Conclusion
 
