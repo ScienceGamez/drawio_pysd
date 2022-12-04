@@ -1,4 +1,7 @@
 # drawio_pysd
+
+Note: This is currently in developement.
+
 Investigating the possiblity to build graphically pysd models using drawio
 
 Drawio allows to create charts in a very customizable way, which can make
@@ -35,6 +38,8 @@ plugins can be added to drawio in a quite easily fashion.
 One should understand javascript and how electron works.
 
 Example can be found at https://github.com/jgraph/drawio/tree/dev/src/main/webapp/plugins 
+
+The plugin can simply be imported in drawio.
 
 ## Conclusion
 
