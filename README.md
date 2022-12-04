@@ -41,6 +41,12 @@ Example can be found at https://github.com/jgraph/drawio/tree/dev/src/main/webap
 
 The plugin can simply be imported in drawio.
 
+### Enabling plugins on linux
+
+Add the option to the command line:
+
+`drawio --enable-plugins`
+
 ### Location of the plugin file
 
 Once you load the plugin for the first time on the menu, it will be loaded to:
