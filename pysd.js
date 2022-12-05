@@ -768,6 +768,7 @@ var EquationDialog = function (ui, cell) {
 
 
 // Checks when a cell is created
+// TODO: this doesn't work at the moment
 Draw.loadPlugin(function (ui) {
 	// Attribute a name to newly created cells
 	ui.editor.graph.addListener(mxEvent.CELLS_ADDED , function (cellsAdded ) {
