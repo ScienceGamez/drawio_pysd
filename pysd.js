@@ -10,13 +10,22 @@
  */
 Draw.loadPlugin(function (ui) {
 
-	function createPysdCell() {
+	function createPysdCell(pysdType, name, initial, equation) {
 		var cell = new mxCell('%Name%', new mxGeometry(0, 0, 80, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
 		cell.vertex = true;
 		ui.sidebar.graph.setAttributeForCell(cell, 'placeholders', '1');
-		ui.sidebar.graph.setAttributeForCell(cell, 'Name', 'new_variable');
+		ui.sidebar.graph.setAttributeForCell(cell, 'Name', name);
 		ui.sidebar.graph.setAttributeForCell(cell, 'Doc', '');
 		ui.sidebar.graph.setAttributeForCell(cell, 'Units', '-');
+		if (initial){
+			ui.sidebar.graph.setAttributeForCell(cell, '_initial', '0');
+		}
+		if (equation){
+			ui.sidebar.graph.setAttributeForCell(cell, '_equation', '');
+		}
+		// matching component type in pysd
+		// https://github.com/SDXorg/pysd/blob/master/pysd/translators/structures/abstract_model.py
+		ui.sidebar.graph.setAttributeForCell(cell, '_pysd_type', pysdType);
 		return cell;
 	}
 	var template_cell = createPysdCell();
@@ -26,8 +35,37 @@ Draw.loadPlugin(function (ui) {
 		var fns = [
 			ui.sidebar.createVertexTemplateEntry('shape=image;image=https://raw.githubusercontent.com/SDXorg/pysd/master/docs/images/PySD_Logo.svg;editable=0;resizable=1;movable=1;rotatable=0', 100, 100, '', 'PySD Logo', null, null, 'text heading title'),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
-				var cell = createPysdCell();
+				var cell = createPysdCell('AbstractComponent', "new_variable");
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Variable');
+			})),
+			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+				var cell = createPysdCell('AbstractUnchangeableConstant', 'new_constant', true, false);
+				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Constant');
+			})),
+			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+				var cell = createPysdCell('IntegStructure', 'new_integ', true, true);
+				// make the cell a rectangle instead of a text keeping the same other style
+				cell.setStyle('rounded=0;whiteSpace=wrap;html=1;');
+				// add another cell and an arrow to it
+				var cell2 = createPysdCell('Sink');
+				cell2.setAttribute('Name', '');
+				// cell2 is an ellipse
+				cell2.setStyle('ellipse;whiteSpace=wrap;html=1;');
+				// It is located at the right of the cell connected by an arrow
+				// The offset is the same as the cell
+				// Set the position of the cell2 to the right of the cell
+				cell2.geometry.x = 2* cell.geometry.width + cell.geometry.x;
+				// add a visible arrow
+				var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'endArrow=classic;html=1;rounded=0;');
+				edge.edge = true;
+				// connect the edge to the cells
+				edge.setTerminal(cell, true);
+				edge.setTerminal(cell2, false);
+
+				// add the cells to the graph
+				var cells = [cell, cell2, edge];
+				return ui.sidebar.createVertexTemplateFromCells(cells, cell.geometry.width + cell2.geometry.width, cell.geometry.height, 'Integ Structure');
+
 			})),
 			//ui.sidebar.createVertexTemplateFromCells([createPysdCell()], cell.geometry.width, cell.geometry.height, 'Variable'),
 		]
@@ -133,11 +171,35 @@ var variables_dict = {};
 Draw.loadPlugin(function (ui) {
 
 });
+
+
+
 /**
  * Constructs a new equation dialog.
- * This is taken from drawio EditDataDialog and moodi
+ * This is taken from drawio EditDataDialog and moodified
  */
 var EquationDialog = function (ui, cell) {
+
+	// Top level element
+	var top = document.createElement('section');
+	top.style.position = 'absolute';
+	top.style.top = '30px';
+	top.style.left = '30px';
+	top.style.right = '30px';
+	top.style.bottom = '80px';
+	top.style.overflowY = 'auto';
+	// create a title for top
+	var topTitle = document.createElement('h3');
+	// The title depend on the pysd type of the cell
+	title = cell.getAttribute('_pysd_type', 'variable') ;
+	// Add spaces between the words
+	title = title.replace(/([A-Z])/g, ' $1').trim();
+	// Remove the first word if it is abstract
+	title = title.replace('Abstract', '');
+	topTitle.innerHTML = title;
+	top.appendChild(topTitle);
+
+
 	var div = document.createElement('div');
 	var graph = ui.editor.graph;
 
@@ -168,19 +230,83 @@ var EquationDialog = function (ui, cell) {
 	var propertiesForm = new mxForm('properties');
 	propertiesForm.table.style.width = '100%';
 
-	var variablesForm = new mxForm('properties');
-	variablesForm.table.style.width = '100%';
+
 
 	var attrs = value.attributes;
 	var names = [];
 	var texts = [];
 	var count = 0;
 	var variable_names = [];
-	var variable_texts = [];
 	var variable_count = 0;
+	var equationNode = null;
+
 
 	var id = (EditDataDialog.getDisplayIdForCell != null) ?
 		EditDataDialog.getDisplayIdForCell(ui, cell) : null;
+
+	// create an area for the equation
+	var equationAreaDiv = document.createElement('div');
+	var equationArea = document.createElement('textarea');
+	// remeber the last cursor position
+	var equationAreaCursorPosition = 0;
+	// update last cursor position
+	equationArea.addEventListener('click', function () {
+		equationAreaCursorPosition = equationArea.selectionStart;
+	});
+	// when dragging a variable, it will be added to the equation at the drop location
+	equationArea.addEventListener('dragover', function (event) {
+		event.preventDefault();
+	});
+	equationArea.addEventListener('drop', function (event) {
+		event.preventDefault();
+		var data = event.dataTransfer.getData("text");
+		// find text index at the mouse position
+		var text_index = equationAreaCursorPosition;
+		// add the variable to the equation at the mouse position
+		var equation = equationArea.value;
+		// surround the data with spaces
+		equationArea.value = equation.substring(0, text_index) + " " + data + " " + equation.substring(text_index);
+
+	});
+	// when selecting text and writing any kind of bracket, the brackets will be added around the selected text
+	equationArea.addEventListener('keydown', function (event) {
+		var key = event.key;
+		var equation = equationArea.value;
+		var selectionStart = equationArea.selectionStart;
+		var selectionEnd = equationArea.selectionEnd;
+		var selectedText = equation.substring(selectionStart, selectionEnd);
+		if (selectedText.length > 0) {
+			if (key == "(" || key == "[" || key == "{") {
+				event.preventDefault();
+				// get the clsoing bracket
+				var closingBracket = "";
+				if (key == "(") {
+					closingBracket = ")";
+				}
+				else if (key == "[") {
+					closingBracket = "]";
+				}
+				else if (key == "{") {
+					closingBracket = "}";
+				}
+
+				equationArea.value = equation.substring(0, selectionStart) + key + selectedText + closingBracket + equation.substring(selectionEnd);
+				equationArea.selectionStart = selectionStart + 1;
+				equationArea.selectionEnd = selectionEnd + 1;
+			}
+		}
+	});
+
+
+	equationArea.style.width = '100%';
+	equationArea.style.height = '100%';
+	equationAreaDiv.appendChild(equationArea);
+	equationAreaDiv.style.textAlign = 'center';
+
+	// set default text in equation area
+	// the equation is stored in the property xml
+	equationArea.value =  "";
+
 
 	var addRemoveButton = function (text, name, form) {
 		var wrapper = document.createElement('div');
@@ -249,34 +375,47 @@ var EquationDialog = function (ui, cell) {
 		}
 	};
 
+	var equationVariablesDiv = document.createElement('div');
+	// add a title in the div
+	var equationVariablesTitle = document.createElement('h3');
+	equationVariablesTitle.innerHTML = "Variables";
+	equationVariablesDiv.appendChild(equationVariablesTitle);
+
 	// area containing the the variables
 	var addVariables = function (index, cell) {
-		// TODO change that and make buttons instead
+
+		var button = document.createElement('button');
+
 		var name = cell.getAttribute('Name', 'new_variable');
-		var value = cell.getAttribute('Name', 'new_variable');
+		button.name = name;
+		button.innerText = name;
+		// When clicking on the button, add the variable to the equation area at the position of the cursor
+		button.addEventListener('click', function (event) {
+			var dropLocation = equationArea.selectionStart;
+			equationArea.value = equationArea.value.slice(0, dropLocation) + " "+ button.name + " "+ equationArea.value.slice(dropLocation);
+		});
+		// When dragging the button in the equation area, add the variable to the equation area, at the position of the drop
+		button.draggable = true;
+		button.addEventListener('dragstart', function (event) {
+			event.dataTransfer.setData("text", " " + button.name + " ");
+		});
+
+
 		variable_names[index] = name;
-		variable_texts[index] = variablesForm.addTextarea(variable_names[variable_count] + ':', value, 2);
-		variable_texts[index].style.width = '100%';
-
-		if (value.indexOf('\n') > 0) {
-			variable_texts[index].setAttribute('rows', '2');
-		}
-
+		equationVariablesDiv.appendChild(button);
 		// addRemoveButton(variable_texts[index], name, variablesForm);
 
-		if (meta[name] != null && meta[name].editable == false) {
-			variable_texts[index].setAttribute('disabled', 'disabled');
-		}
 	};
 
 	var temp = [];
 	var isLayer = graph.getModel().getParent(cell) == graph.getModel().getRoot();
-
 	for (var i = 0; i < attrs.length; i++) {
 		if ((attrs[i].nodeName != 'label' || Graph.translateDiagram ||
-			isLayer) && attrs[i].nodeName != 'placeholders') {
+			isLayer) && attrs[i].nodeName != 'placeholders'
+			&& ! attrs[i].nodeName.startsWith('_')) {
 			temp.push({ name: attrs[i].nodeName, value: attrs[i].nodeValue });
 		}
+
 	}
 
 	// Sorts by name
@@ -291,8 +430,10 @@ var EquationDialog = function (ui, cell) {
 			else {
 				return 0;
 			}
-		}); */
+		});
+	*/
 
+	// for editing the id
 	if (id != null) {
 		var text = document.createElement('div');
 		text.style.width = '100%';
@@ -326,11 +467,37 @@ var EquationDialog = function (ui, cell) {
 		text.setAttribute('title', 'Shift+Double Click to Edit ID');
 	}
 
+	top.appendChild(propertiesForm.table);
+
+
+	// If the cell has an attribute named _initial, create a text area for editing the _initial value
+	var initialArea = document.createElement('textarea');
+	if (value.getAttribute('_initial') != null) {
+		var initialAreaDiv = document.createElement('div');
+		// add a title in the div
+		var initialAreaTitle = document.createElement('h3');
+		initialAreaTitle.innerHTML = "Initial Value";
+		initialAreaDiv.appendChild(initialAreaTitle);
+
+
+		initialAreaDiv.appendChild(initialArea);
+
+		initialArea.value = value.getAttribute('_initial');
+		// add to top
+		top.appendChild(initialAreaDiv);
+	}
+
+
 	for (var i = 0; i < temp.length; i++) {
-		mxLog.info("asdf");
 		addTextArea(count, temp[i].name, temp[i].value);
 		count++;
 	}
+
+
+
+
+
+
 
 	function getChildrenOfCell(cell){
 		if(cell != undefined){
@@ -351,24 +518,33 @@ var EquationDialog = function (ui, cell) {
 		}
 		}
 
-	var parents = getChildrenOfCell(cell);
 
+
+
+
+
+	var parents = getChildrenOfCell(cell);
 	for (var i = 0; i < parents.length; i++) {
 		addVariables(variable_count, parents[i]);
 		variable_count++;
 	}
 
 
-	var top = document.createElement('section');
-	top.style.position = 'absolute';
-	top.style.top = '30px';
-	top.style.left = '30px';
-	top.style.right = '30px';
-	top.style.bottom = '80px';
-	top.style.overflowY = 'auto';
+	// only add the equation if the cell contains an _equation parameter
+	if (cell.getAttribute('_equation') != null) {
+		var equationTitleDiv = document.createElement('div');
+		// set title string
+		var equationTitle = document.createElement('h3');
+		equationTitle.innerHTML = "Equation";
+		equationTitleDiv.appendChild(equationTitle);
 
-	top.appendChild(propertiesForm.table);
-	top.appendChild(variablesForm.table);
+		// set initial value in the equation area
+		equationArea.value = cell.getAttribute('_equation');
+
+		top.appendChild(equationTitleDiv);
+		top.appendChild(equationAreaDiv);
+	}
+	top.appendChild(equationVariablesDiv);
 
 	// var newProp = document.createElement('div');
 	// newProp.style.boxSizing = 'border-box';
@@ -489,6 +665,10 @@ var EquationDialog = function (ui, cell) {
 			if (removeLabel) {
 				value.removeAttribute('label');
 			}
+			// TODO add a check that variables are in the equation
+
+			// Save the equation as an attribute
+			value.setAttribute('_equation', equationArea.value);
 
 			// Updates the value of the cell (undoable)
 			graph.getModel().setValue(cell, value);
@@ -586,6 +766,35 @@ var EquationDialog = function (ui, cell) {
 	this.container = div;
 };
 
+
+// Checks when a cell is created
+Draw.loadPlugin(function (ui) {
+	// Attribute a name to newly created cells
+	ui.editor.graph.addListener(mxEvent.CELLS_ADDED , function (cellsAdded ) {
+		for (var i = 0; i < cellsAdded.length; i++) {
+			var cell = cellsAdded[i];
+			// If the cell has a attribute Name, then it is a pysd variable
+			if (cell.getAttribute('Name') != null) {
+				// add a number at the end of the name if it already exists
+				var name = cell.getAttribute('Name');
+				var i = 1;
+				while (ui.editor.graph.getModel().getCell(name) != null) {
+					name = cell.getAttribute('Name') + i;
+					i++;
+				}
+				// set the name of the cell
+				cell.setId(name);
+				cell.setAttribute('Name', name);
+				// update the cell
+				ui.editor.graph.refresh(cell);
+			}
+		}
+	}
+	);
+
+});
+
+
 // Checks when a cell is clicked
 Draw.loadPlugin(function (ui) {
 
@@ -613,7 +822,8 @@ Draw.loadPlugin(function (ui) {
 	// Check the click handler
 	var dblClick = ui.editor.graph.dblClick
 	ui.editor.graph.dblClick = function (evt, cell) {
-		if (cell != null) {
+		// check if the cell is an edge
+		if (cell != null && ! graph.getModel().isEdge(cell)) {
 			updateOverlays(cell);
 		} else {
 			dblClick.apply(this, arguments);
