@@ -10,6 +10,8 @@
  */
 Draw.loadPlugin(function (ui) {
 
+
+
 	function createPysdCell(pysdType, name, initial, equation) {
 		var cell = new mxCell('%Name%', new mxGeometry(0, 0, 80, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
 		cell.vertex = true;
@@ -28,14 +30,27 @@ Draw.loadPlugin(function (ui) {
 		ui.sidebar.graph.setAttributeForCell(cell, '_pysd_type', pysdType);
 		return cell;
 	}
-	var template_cell = createPysdCell();
+
+	function createFluxCell() {
+		// The flux is a collate shape to which we add a point in the middle for aestetics
+		// we set the text at the bottom
+		var cell = createPysdCell('AbstractElement', 'flux', false, true);
+		cell.setStyle("shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;")
+		return cell;
+	}
+
+	function createEdge() {
+		var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'endArrow=classic;html=1;rounded=0;');
+		edge.edge = true;
+		return edge;
+	}
 
 	// Sidebar is null in lightbox
 	if (ui.sidebar != null) {
 		var fns = [
 			ui.sidebar.createVertexTemplateEntry('shape=image;image=https://raw.githubusercontent.com/SDXorg/pysd/master/docs/images/PySD_Logo.svg;editable=0;resizable=1;movable=1;rotatable=0', 100, 100, '', 'PySD Logo', null, null, 'text heading title'),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
-				var cell = createPysdCell('AbstractComponent', "new_variable");
+				var cell = createPysdCell('AbstractComponent', "new_variable", false, true);
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Variable');
 			})),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
@@ -43,28 +58,43 @@ Draw.loadPlugin(function (ui) {
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Constant');
 			})),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
-				var cell = createPysdCell('IntegStructure', 'new_integ', true, true);
+				var cell = createFluxCell();
+				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Element');
+			})),
+			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+				var cell_integ = createPysdCell('IntegStructure', 'new_integ', true, true);
 				// make the cell a rectangle instead of a text keeping the same other style
-				cell.setStyle('rounded=0;whiteSpace=wrap;html=1;');
+				cell_integ.setStyle('rounded=0;whiteSpace=wrap;html=1;');
+				// add a text box to the edge
+				var flux_cell = createFluxCell();
 				// add another cell and an arrow to it
-				var cell2 = createPysdCell('Sink');
-				cell2.setAttribute('Name', '');
-				// cell2 is an ellipse
-				cell2.setStyle('ellipse;whiteSpace=wrap;html=1;');
+				var cell_to = createPysdCell('Sink');
+				cell_to.setAttribute('Name', '');
+				// cell_to is an ellipse
+				cell_to.setStyle('ellipse;whiteSpace=wrap;html=1;');
 				// It is located at the right of the cell connected by an arrow
 				// The offset is the same as the cell
-				// Set the position of the cell2 to the right of the cell
-				cell2.geometry.x = 2* cell.geometry.width + cell.geometry.x;
+				// Set the position of the cell_to to the right of the cell
+				flux_cell.geometry.x = 2* cell_integ.geometry.width + cell_integ.geometry.x;
+				cell_to.geometry.x = 4* cell_integ.geometry.width + cell_integ.geometry.x;
+				flux_cell.geometry.height = 2 * cell_integ.geometry.height;
+				cell_integ.geometry.y = flux_cell.geometry.y + cell_integ.geometry.height / 2;
+				cell_to.geometry.y = flux_cell.geometry.y + cell_integ.geometry.height / 2;
 				// add a visible arrow
-				var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'endArrow=classic;html=1;rounded=0;');
-				edge.edge = true;
+				var edge_integ_flux = createEdge();
+				edge_integ_flux.setStyle('shape=flexArrow;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;')
+				var edge_flux_to = createEdge();
+				edge_flux_to.setStyle('shape=flexArrow;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;')
 				// connect the edge to the cells
-				edge.setTerminal(cell, true);
-				edge.setTerminal(cell2, false);
+				edge_integ_flux.setTerminal(cell_integ, true);
+				edge_integ_flux.setTerminal(flux_cell, false);
+				edge_flux_to.setTerminal(flux_cell, true);
+				edge_flux_to.setTerminal(cell_to, false);
+
 
 				// add the cells to the graph
-				var cells = [cell, cell2, edge];
-				return ui.sidebar.createVertexTemplateFromCells(cells, cell.geometry.width + cell2.geometry.width, cell.geometry.height, 'Integ Structure');
+				var cells = [cell_integ, cell_to, edge_integ_flux, edge_flux_to, flux_cell];
+				return ui.sidebar.createVertexTemplateFromCells(cells, 5 * cell_integ.geometry.width, cell_integ.geometry.height, 'Integ Structure');
 
 			})),
 			//ui.sidebar.createVertexTemplateFromCells([createPysdCell()], cell.geometry.width, cell.geometry.height, 'Variable'),
