@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2022-12-14T21:46:36.977Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.6.2 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36" version="20.6.2" etag="azSzbyjmyFKEER5ZwY0w" type="device">
+  <diagram id="nHi-_M6qC4rsmJ_72PdH" name="Page-1">
+    <mxGraphModel dx="744" dy="680" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="%Name%" placeholders="1" Name="Teacup Temperature" Doc="The temperature of the teacup" Units="C" _initial="0" _equation="-  Heat Loss to Room " _pysd_type="IntegStructure" id="4TX2-69w3CT22Hbb08V7-1">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+            <mxGeometry x="110" y="300" width="100" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4TX2-69w3CT22Hbb08V7-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="4TX2-69w3CT22Hbb08V7-2" target="4TX2-69w3CT22Hbb08V7-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Heat Loss to Room" Doc="The loss of heat to room" Units="J/s" _equation=" Characteristic Time  *   ( Teacup Temperature -  Room Temperature )" _pysd_type="AbstractElement" id="4TX2-69w3CT22Hbb08V7-2">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="1" vertex="1">
+            <mxGeometry x="300" y="300" width="30" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4TX2-69w3CT22Hbb08V7-5" value="" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="450" y="300" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4TX2-69w3CT22Hbb08V7-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="4TX2-69w3CT22Hbb08V7-2" target="4TX2-69w3CT22Hbb08V7-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="440" as="sourcePoint" />
+            <mxPoint x="400" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4TX2-69w3CT22Hbb08V7-7" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="4TX2-69w3CT22Hbb08V7-1" target="4TX2-69w3CT22Hbb08V7-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="230" y="490" as="sourcePoint" />
+            <mxPoint x="280" y="440" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="110" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4TX2-69w3CT22Hbb08V7-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" parent="1" source="4TX2-69w3CT22Hbb08V7-8" target="4TX2-69w3CT22Hbb08V7-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Characteristic Time" Doc="The time constant for the teacup" Units="-" _initial="0" _pysd_type="AbstractUnchangeableConstant" _equation="" id="4TX2-69w3CT22Hbb08V7-8">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
+            <mxGeometry x="250" y="220" width="130" height="40" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4TX2-69w3CT22Hbb08V7-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;curved=1;" parent="1" source="4TX2-69w3CT22Hbb08V7-10" target="4TX2-69w3CT22Hbb08V7-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="425" />
+              <mxPoint x="360" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Room Temperature" Doc="" Units="C" _initial="0" _pysd_type="AbstractUnchangeableConstant" _equation="" id="4TX2-69w3CT22Hbb08V7-10">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
+            <mxGeometry x="420" y="370" width="95" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
