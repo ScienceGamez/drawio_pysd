@@ -1,0 +1,162 @@
+AbstractModel(
+    original_path=PosixPath("teacup.mdl"),
+    sections=(
+        AbstractSection(
+            name="__main__",
+            path=PosixPath("teacup.py"),
+            type="main",
+            params=[],
+            returns=[],
+            subscripts=[],
+            elements=[
+                AbstractElement(
+                    name="Characteristic Time",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=10,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Minutes",
+                    limits=(0.0, None),
+                    documentation="How long will it take the teacup to cool 1/e of the way to equilibrium?",
+                ),
+                AbstractElement(
+                    name="Heat Loss to Room",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=ArithmeticStructure(
+                                operators=["/"],
+                                arguments=(
+                                    ArithmeticStructure(
+                                        operators=["-"],
+                                        arguments=(
+                                            ReferenceStructure(
+                                                reference="teacup_temperature",
+                                                subscripts=None,
+                                            ),
+                                            ReferenceStructure(
+                                                reference="room_temperature",
+                                                subscripts=None,
+                                            ),
+                                        ),
+                                    ),
+                                    ReferenceStructure(
+                                        reference="characteristic_time", subscripts=None
+                                    ),
+                                ),
+                            ),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Degrees Fahrenheit/Minute",
+                    limits=(None, None),
+                    documentation="This is the rate at which heat flows from the cup into the room. We can ignore it at this point.",
+                ),
+                AbstractElement(
+                    name="Room Temperature",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=70,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Degrees Fahrenheit",
+                    limits=(-459.67, None),
+                    documentation="Put in a check to ensure the room temperature is not driven below absolute zero.",
+                ),
+                AbstractElement(
+                    name="Teacup Temperature",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=IntegStructure(
+                                flow=ArithmeticStructure(
+                                    operators=["negative"],
+                                    arguments=(
+                                        ReferenceStructure(
+                                            reference="heat_loss_to_room",
+                                            subscripts=None,
+                                        ),
+                                    ),
+                                ),
+                                initial=180,
+                            ),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Degrees Fahrenheit",
+                    limits=(32.0, 212.0),
+                    documentation="The model is only valid for the liquid phase of tea. While the tea could theoretically freeze or boil off, we would want an error to be thrown in these cases so that the modeler can identify the issue and decide whether to expand the model. Of course, this refers to standard sea-level conditions...",
+                ),
+                AbstractControlElement(
+                    name="FINAL TIME",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=30,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Minute",
+                    limits=(None, None),
+                    documentation="The final time for the simulation.",
+                ),
+                AbstractControlElement(
+                    name="INITIAL TIME",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=0,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Minute",
+                    limits=(None, None),
+                    documentation="The initial time for the simulation.",
+                ),
+                AbstractControlElement(
+                    name="SAVEPER",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=ReferenceStructure(
+                                reference="time_step", subscripts=None
+                            ),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Minute",
+                    limits=(0.0, None),
+                    documentation="The frequency with which output is stored.",
+                ),
+                AbstractControlElement(
+                    name="TIME STEP",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=0.125,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Minute",
+                    limits=(0.0, None),
+                    documentation="The time step for the simulation.",
+                ),
+            ],
+            split=False,
+            views_dict=None,
+        ),
+    ),
+)
