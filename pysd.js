@@ -58,6 +58,11 @@ Draw.loadPlugin(function (ui) {
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Constant');
 			})),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+				var cell =  createPysdCell('IntegStructure', 'new_integ', true, true);
+				cell.setStyle('rounded=0;whiteSpace=wrap;html=1;');
+				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Integ/Stock');
+			})),
+			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
 				var cell = createFluxCell();
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Element');
 			})),
@@ -71,7 +76,7 @@ Draw.loadPlugin(function (ui) {
 				var cell_to = createPysdCell('Sink');
 				cell_to.setAttribute('Name', '');
 				// cell_to is an ellipse
-				cell_to.setStyle('ellipse;whiteSpace=wrap;html=1;');
+				cell_to.setStyle('ellipse;shape=cloud;whiteSpace=wrap;html=1;');
 				// It is located at the right of the cell connected by an arrow
 				// The offset is the same as the cell
 				// Set the position of the cell_to to the right of the cell
@@ -101,38 +106,10 @@ Draw.loadPlugin(function (ui) {
 		]
 		ui.sidebar.addPaletteFunctions('pysd', 'PySD', true, fns)
 		// Adds custom sidebar entry
-		// ui.sidebar.addPalette('pysd', 'PySD', true, function (content) {
-
-		// 	// content.appendChild(ui.sidebar.createVertexTemplate(null, 120, 60 ));
-
-		// 	content.appendChild(ui.sidebar.addEntry('variable placeholder metadata pysd', mxUtils.bind(ui.sidebar, function () {
-		// 		var cell = new mxCell('%Name%', new mxGeometry(0, 0, 80, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
-		// 		cell.vertex = true;
-		// 		ui.sidebar.graph.setAttributeForCell(cell, 'placeholders', '1');
-		// 		ui.sidebar.graph.setAttributeForCell(cell, 'Name', '<new_variable>');
-		// 		ui.sidebar.graph.setAttributeForCell(cell, 'Doc', '');
-		// 		return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'PySD Element');
-		// 	})))
-		// 	var cell = new mxCell('%Name%', new mxGeometry(0, 0, 80, 20), '');
-		// 	content.appendChild(ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'PySD Element'));
-
-		// 	var template_element = ui.sidebar.createVertexTemplate('', 120, 60, '%Name%', 'PySD Template Element');
-		// 	// content.setAttributeForCell('placeholders', '1');
-		// 	// content.setAttributeForCell('Name', '<new_variable>');
-		// 	content.appendChild(template_element);
-		// 	var integ = ui.sidebar.createVertexTemplate('', 120, 60, '<integ2>', 'Integ');
-		// 	content.appendChild(integ);
-		// 	content.appendChild(ui.sidebar.createVertexTemplate('text;', 120, 60, '<constant>', 'Constant'));
-		//
-		// 	content.appendChild(ui.sidebar.createVertexTemplate('text;spacingTop=-5;fontFamily=Courier New;fontSize=8;fontColor=#999999;resizable=0;movable=0;rotatable=0', 100, 100));
-		// 	content.appendChild(ui.sidebar.createVertexTemplate('rounded=1;whiteSpace=wrap;gradientColor=none;fillColor=#004C99;shadow=1;strokeColor=#FFFFFF;align=center;fontColor=#FFFFFF;strokeWidth=3;fontFamily=Courier New;verticalAlign=middle', 100, 100));
-		// 	content.appendChild(ui.sidebar.createVertexTemplate('curved=1;strokeColor=#004C99;endArrow=oval;endFill=0;strokeWidth=3;shadow=1;dashed=1', 100, 100));
-		// });
 
 		// Collapses default sidebar entry and inserts this before
 		var c = ui.sidebar.container;
 		c.firstChild.click();
-		c.insertBefore(c.lastChild, c.firstChild);
 		c.insertBefore(c.lastChild, c.firstChild);
 
 		// Adds logo to footer
