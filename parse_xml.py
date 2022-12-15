@@ -25,7 +25,39 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
     # an element can be a variable, a number, a function, a parenthesis, an operator
     # variables can contain spaces but they are always separated from each other by an operator or parenthesis
 
+    splitted = split_equation(equation)
+    print(splitted)
 
+    if len(splitted) == 1:
+        # IF the equation is a number, return the number
+        if re.match(r"^\d+(\.\d+)?$", splitted[0]):
+            return float(splitted[0])
+        # If the equation is a variable, return the variable
+        elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*$", splitted[0]):
+            return abstract_expressions.ReferenceStructure(splitted[0])
+
+        else:
+            raise ValueError(f"Equation {equation} is not valid")
+
+    # Now that we have split around operators we can add the variables
+    # in an arithmetic structure
+
+    # If the equation starts with a negative sign, return a negative structure
+    if splitted[0] == "-":
+        return abstract_expressions.ArithmeticStructure(
+            operators=["negative"],
+            arguments=(equation_2_ast(splitted[1:]), )
+        )
+
+    # Check that the splitted element lenght is odd
+    if len(splitted) % 2 == 0:
+        raise ValueError(f"Equation {equation} is not valid")
+
+    return abstract_expressions.ArithmeticStructure(
+        # operators are the odd elements
+        operators=splitted[1::2],
+        arguments=[equation_2_ast(element) for element in splitted[::2]]
+    )
 
 
 
@@ -37,51 +69,57 @@ def split_equation(equation: str) -> list[str]:
     """Split the equation in a list by removing parenthesis."""
     # split the equation in a list by removing parenthesis
     # but if parenthesis are inside other parenthesis, keep them
-    # exemple = "38.4 * (7625 +( 98.7 - j)) * (1 + ab Lol)"
-    # split_equation(exemple) = ['38.4 *', , '7625 + (98.7 - j)', '*', 1 + ab Lol']
-    split_equation = []
+    # This should make sure to remove spaces or parenthesis around the
+    # list elements it returns
+    # exemple = "38.4 * (7625 +(98.7 - j)) * (1 + ab Lol)"
+    # split_equation(exemple) = ['38.4', '*' , '7625 +(98.7 - j)', '*', '1 + ab Lol']
+    # example2 = "1 + ab Lol"
+    # split_equation(example2) = ['1', '+', 'ab Lol']
 
-    def collect_element(element: str) -> None:
-        """Collect the element and add it to the list."""
-        if element == "":
-            return
-        if element[0] == "(" and element[-1] == ")":
-            element = element[1:-1]
-        split_equation.append(element)
-
+    elements = []
     parenthesis = 0
-    current_element = ""
+    element = ""
     for char in equation:
         if char == "(":
             parenthesis += 1
+            element += char
+
         elif char == ")":
             parenthesis -= 1
-        # If element is an operator and it is not inside parenthesis
-        # collect the current element and start a new one
-        elif char in "+-*/" and parenthesis == 0:
-            collect_element(current_element)
-            current_element = ""
-            split_equation.append(char)
-            continue
-        elif char == " " and parenthesis == 0:
+            element += char
 
-            collect_element(current_element)
-            current_element = ""
-            continue
-        current_element += char
+        elif char in ["+", "-", "*", "/"] and parenthesis == 0:
+            # If the parenthesis are closed and the char is an operator, we are at the end of an element
+            # Add the element to the list
+            elements.append(element.strip())
+            # Reset the element
+            element = ""
+            # Add the operator to the list
+            elements.append(char)
 
-    # If the current element is surrounded by parenthesis, remove them
+        else:
+            # If the parenthesis are not closed or the char is not an operator, we are still in the same element
+            # Add the char to the element
+            element += char
+
+    # Add the last element
+    elements.append(element.strip())
+
+    # Remove empty elements
+    # If an element is surrounded by parenthesis, remove the parenthesis
+    return [
+        element if element[0] != "(" and element[-1] != ")" else element[1:-1]
+        for element in elements if element != ""
+    ]
 
 
-    collect_element(current_element)
-    return split_equation
+
 
 
 print(split_equation(exemple))
 
 
 print(equation_2_ast(exemple))
-raise SystemExit()
 
 
 
@@ -123,9 +161,12 @@ class PysdElementsHandler(ContentHandler):
                     initial=attrs.getValueByQName('_initial'),
                     flow=equation_2_ast(equation),
                 )
-
+            case "AbstractElement":
+                return equation_2_ast(equation)
+            case "AbstractUnchangeableConstant":
+                return float(attrs.getValueByQName('_initial'))
             case _:
-                raise NotImplementedError(f"pysd_type {pysd_type} not implemented")
+                raise NotImplementedError(f"pysd_type {pysd_type} not implemented: {equation=} {attrs=} {attrs.getValueByQName('_initial')=}")
 
 parser = make_parser()
 parser.setFeature(feature_namespaces, True)
@@ -153,4 +194,5 @@ model = abstract_model.AbstractModel(
     ),
 )
 
+print(model.sections)
 ModelBuilder(model).build_model()
