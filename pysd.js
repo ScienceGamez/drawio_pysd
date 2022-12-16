@@ -19,10 +19,10 @@ Draw.loadPlugin(function (ui) {
 		ui.sidebar.graph.setAttributeForCell(cell, 'Name', name);
 		ui.sidebar.graph.setAttributeForCell(cell, 'Doc', '');
 		ui.sidebar.graph.setAttributeForCell(cell, 'Units', '-');
-		if (initial){
+		if (initial) {
 			ui.sidebar.graph.setAttributeForCell(cell, '_initial', '0');
 		}
-		if (equation){
+		if (equation) {
 			ui.sidebar.graph.setAttributeForCell(cell, '_equation', '');
 		}
 		// matching component type in pysd
@@ -50,6 +50,35 @@ Draw.loadPlugin(function (ui) {
 		var fns = [
 			ui.sidebar.createVertexTemplateEntry('shape=image;image=https://raw.githubusercontent.com/SDXorg/pysd/master/docs/images/PySD_Logo.svg;editable=0;resizable=1;movable=1;rotatable=0', 100, 100, '', 'PySD Logo', null, null, 'text heading title'),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+				// control variables
+				var controlVariables = new Array( "INITIAL TIME", "FINAL TIME",  "TIME STEP", "SAVEPER" );
+				// create a list to store the cells
+				var cells = [];
+				// iterate over the names of the control variables
+				for (var i = 0; i < controlVariables.length; i++) {
+					// create a cell for each control variable
+					var cell = createPysdCell('ControlVar', controlVariables[i], true, false);
+					// add the cell to the list
+					cells.push(cell);
+					// put the cell next to the previous one
+					cell.geometry.x = i * cell.geometry.width;
+					// set the attribute for the value of the control variable
+					cell.setAttribute('Name', controlVariables[i]);
+				}
+				// set the doc of the variables
+				cells[0].setAttribute('Doc', 'Initial time of the simulation');
+				cells[1].setAttribute('Doc', 'Final time of the simulation');
+				cells[2].setAttribute('Doc', 'Time step of the simulation');
+				cells[3].setAttribute('Doc', 'The frequency with which output is stored.');
+				// set default values
+				cells[0].setAttribute('_initial', '0');
+				cells[1].setAttribute('_initial', '10');
+				cells[2].setAttribute('_initial', '0.25');
+				cells[3].setAttribute('_initial', '1');
+
+				return ui.sidebar.createVertexTemplateFromCells(cells, cell.geometry.width, cell.geometry.height, 'Control Variables');
+			})),
+			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
 				var cell = createPysdCell('AbstractComponent', "new_variable", false, true);
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Variable');
 			})),
@@ -58,7 +87,7 @@ Draw.loadPlugin(function (ui) {
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Constant');
 			})),
 			ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
-				var cell =  createPysdCell('IntegStructure', 'new_integ', true, true);
+				var cell = createPysdCell('IntegStructure', 'new_integ', true, true);
 				cell.setStyle('rounded=0;whiteSpace=wrap;html=1;');
 				return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Integ/Stock');
 			})),
@@ -80,8 +109,8 @@ Draw.loadPlugin(function (ui) {
 				// It is located at the right of the cell connected by an arrow
 				// The offset is the same as the cell
 				// Set the position of the cell_to to the right of the cell
-				flux_cell.geometry.x = 2* cell_integ.geometry.width + cell_integ.geometry.x;
-				cell_to.geometry.x = 4* cell_integ.geometry.width + cell_integ.geometry.x;
+				flux_cell.geometry.x = 2 * cell_integ.geometry.width + cell_integ.geometry.x;
+				cell_to.geometry.x = 4 * cell_integ.geometry.width + cell_integ.geometry.x;
 				flux_cell.geometry.height = 2 * cell_integ.geometry.height;
 				cell_integ.geometry.y = flux_cell.geometry.y + cell_integ.geometry.height / 2;
 				cell_to.geometry.y = flux_cell.geometry.y + cell_integ.geometry.height / 2;
@@ -198,7 +227,7 @@ var EquationDialog = function (ui, cell) {
 	// create a title for top
 	var topTitle = document.createElement('h3');
 	// The title depend on the pysd type of the cell
-	title = cell.getAttribute('_pysd_type', 'variable') ;
+	title = cell.getAttribute('_pysd_type', 'variable');
 	// Add spaces between the words
 	title = title.replace(/([A-Z])/g, ' $1').trim();
 	// Remove the first word if it is abstract
@@ -312,7 +341,7 @@ var EquationDialog = function (ui, cell) {
 
 	// set default text in equation area
 	// the equation is stored in the property xml
-	equationArea.value =  "";
+	equationArea.value = "";
 
 
 	var addRemoveButton = function (text, name, form) {
@@ -399,7 +428,7 @@ var EquationDialog = function (ui, cell) {
 		// When clicking on the button, add the variable to the equation area at the position of the cursor
 		button.addEventListener('click', function (event) {
 			var dropLocation = equationArea.selectionStart;
-			equationArea.value = equationArea.value.slice(0, dropLocation) + " "+ button.name + " "+ equationArea.value.slice(dropLocation);
+			equationArea.value = equationArea.value.slice(0, dropLocation) + " " + button.name + " " + equationArea.value.slice(dropLocation);
 		});
 		// When dragging the button in the equation area, add the variable to the equation area, at the position of the drop
 		button.draggable = true;
@@ -419,7 +448,7 @@ var EquationDialog = function (ui, cell) {
 	for (var i = 0; i < attrs.length; i++) {
 		if ((attrs[i].nodeName != 'label' || Graph.translateDiagram ||
 			isLayer) && attrs[i].nodeName != 'placeholders'
-			&& ! attrs[i].nodeName.startsWith('_')) {
+			&& !attrs[i].nodeName.startsWith('_')) {
 			temp.push({ name: attrs[i].nodeName, value: attrs[i].nodeValue });
 		}
 
@@ -495,6 +524,7 @@ var EquationDialog = function (ui, cell) {
 	}
 
 
+
 	for (var i = 0; i < temp.length; i++) {
 		addTextArea(count, temp[i].name, temp[i].value);
 		count++;
@@ -506,13 +536,13 @@ var EquationDialog = function (ui, cell) {
 
 
 
-	function getChildrenOfCell(cell){
-		if(cell != undefined){
+	function getChildrenOfCell(cell) {
+		if (cell != undefined) {
 			let children = [];
 			let edges = cell.edges;
-			if(edges != null){
-				for(let i = 0; i < edges.length; i++){
-					if(edges[i].target.value == cell.value){
+			if (edges != null) {
+				for (let i = 0; i < edges.length; i++) {
+					if (edges[i].target.value == cell.value) {
 						let cellCopy = edges[i].source.clone();
 						children.push(cellCopy);
 					}
@@ -520,10 +550,10 @@ var EquationDialog = function (ui, cell) {
 			}
 			return children;
 		}
-		else{
+		else {
 			return [];
 		}
-		}
+	}
 
 
 
@@ -677,6 +707,9 @@ var EquationDialog = function (ui, cell) {
 			// Save the equation as an attribute
 			value.setAttribute('_equation', equationArea.value);
 
+			// Save the initial value as an attribute
+			value.setAttribute('_initial', initialArea.value);
+
 			// Updates the value of the cell (undoable)
 			graph.getModel().setValue(cell, value);
 		}
@@ -778,7 +811,7 @@ var EquationDialog = function (ui, cell) {
 // TODO: this doesn't work at the moment
 Draw.loadPlugin(function (ui) {
 	// Attribute a name to newly created cells
-	ui.editor.graph.addListener(mxEvent.CELLS_ADDED , function (cellsAdded ) {
+	ui.editor.graph.addListener(mxEvent.CELLS_ADDED, function (cellsAdded) {
 		for (var i = 0; i < cellsAdded.length; i++) {
 			var cell = cellsAdded[i];
 			// If the cell has a attribute Name, then it is a pysd variable
@@ -831,7 +864,7 @@ Draw.loadPlugin(function (ui) {
 	var dblClick = ui.editor.graph.dblClick
 	ui.editor.graph.dblClick = function (evt, cell) {
 		// check if the cell is an edge
-		if (cell != null && ! graph.getModel().isEdge(cell)) {
+		if (cell != null && !graph.getModel().isEdge(cell)) {
 			updateOverlays(cell);
 		} else {
 			dblClick.apply(this, arguments);

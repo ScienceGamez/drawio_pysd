@@ -3,14 +3,12 @@ from xml.sax.handler import feature_namespaces
 from xml.sax import make_parser
 from pathlib import Path
 from xml.sax.handler import ContentHandler
+import pysd
 from pysd.translators.structures import abstract_expressions, abstract_model
 from pysd.builders.python.python_model_builder import ModelBuilder
 
 # re match variables that can contain spaces but they are always separated from each other by an operator or parenthesis
 # The current code does not work with variables that contain spaces
-
-
-
 
 
 def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
@@ -27,7 +25,8 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
 
     splitted = split_equation(equation)
     print(splitted)
-
+    if len(splitted) == 0:
+        raise ValueError("Equation is empty")
     if len(splitted) == 1:
         # IF the equation is a number, return the number
         if re.match(r"^\d+(\.\d+)?$", splitted[0]):
@@ -45,8 +44,7 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
     # If the equation starts with a negative sign, return a negative structure
     if splitted[0] == "-":
         return abstract_expressions.ArithmeticStructure(
-            operators=["negative"],
-            arguments=(equation_2_ast(splitted[1:]), )
+            operators=["negative"], arguments=(equation_2_ast(splitted[1:]),)
         )
 
     # Check that the splitted element lenght is odd
@@ -56,10 +54,8 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
     return abstract_expressions.ArithmeticStructure(
         # operators are the odd elements
         operators=splitted[1::2],
-        arguments=[equation_2_ast(element) for element in splitted[::2]]
+        arguments=[equation_2_ast(element) for element in splitted[::2]],
     )
-
-
 
 
 exemple = "38.4 * (7625 +( 98.7 - j)) *(4)* (1 + ab Lol)"
@@ -109,18 +105,15 @@ def split_equation(equation: str) -> list[str]:
     # If an element is surrounded by parenthesis, remove the parenthesis
     return [
         element if element[0] != "(" and element[-1] != ")" else element[1:-1]
-        for element in elements if element != ""
+        for element in elements
+        if element != ""
     ]
-
-
-
 
 
 print(split_equation(exemple))
 
 
 print(equation_2_ast(exemple))
-
 
 
 class PysdElementsHandler(ContentHandler):
@@ -130,25 +123,34 @@ class PysdElementsHandler(ContentHandler):
 
     def startElementNS(self, name, qname, attrs):
         if name[1] == "UserObject":
-            print(f"Name: {attrs.getValueByQName('Name')=}")
-            print(f"Doc: {attrs.getValueByQName('Doc')=}")
-            print(f"Units: {attrs.getValueByQName('Units')=}")
-            print(f"_equation: {attrs.getValueByQName('_equation')=}")
-            print(f"_pysd_type: {attrs.getValueByQName('_pysd_type')=}")
             self.create_element(attrs)
 
     def create_element(self, attrs):
 
-        equation = attrs.getValueByQName('_equation')
-        pysd_type = attrs.getValueByQName('_pysd_type')
+        name = attrs.getValueByQName("Name")
+        try:
+            equation = attrs.getValueByQName("_equation")
+        except KeyError:
+            equation = ""
+        pysd_type = attrs.getValueByQName("_pysd_type")
+
+        try:
+            ast = self.create_ast(pysd_type, equation, attrs)
+        except Exception as exp:
+            raise ValueError(
+                f"Error while creating the abstract structure for {name}"
+            ) from exp
+
         element = abstract_model.AbstractElement(
-            name=attrs.getValueByQName('Name'),
-            components=[abstract_model.AbstractComponent(
-                subscripts=([], []),
-                ast=self.create_ast(pysd_type, equation, attrs),
-            )],
-            documentation=attrs.getValueByQName('Doc'),
-            units=attrs.getValueByQName('Units'),
+            name=name,
+            components=[
+                abstract_model.AbstractComponent(
+                    subscripts=([], []),
+                    ast=ast,
+                )
+            ],
+            documentation=attrs.getValueByQName("Doc"),
+            units=attrs.getValueByQName("Units"),
         )
         self.elements.append(element)
 
@@ -158,15 +160,18 @@ class PysdElementsHandler(ContentHandler):
                 return float(equation)
             case "IntegStructure":
                 return abstract_expressions.IntegStructure(
-                    initial=attrs.getValueByQName('_initial'),
+                    initial=equation_2_ast(attrs.getValueByQName("_initial")),
                     flow=equation_2_ast(equation),
                 )
             case "AbstractElement":
                 return equation_2_ast(equation)
-            case "AbstractUnchangeableConstant":
-                return float(attrs.getValueByQName('_initial'))
+            case "AbstractUnchangeableConstant" | "ControlVar":
+                return float(attrs.getValueByQName("_initial"))
             case _:
-                raise NotImplementedError(f"pysd_type {pysd_type} not implemented: {equation=} {attrs=} {attrs.getValueByQName('_initial')=}")
+                raise NotImplementedError(
+                    f"pysd_type {pysd_type} not implemented: {equation=} {attrs=} {attrs.getValueByQName('_initial')=}"
+                )
+
 
 parser = make_parser()
 parser.setFeature(feature_namespaces, True)
@@ -174,6 +179,8 @@ elements_handler = PysdElementsHandler()
 parser.setContentHandler(elements_handler)
 
 file_path = Path("teacup.drawio.xml")
+if not file_path.is_file():
+    raise FileNotFoundError(f"{file_path}")
 parser.parse(file_path)
 
 
@@ -188,6 +195,8 @@ model = abstract_model.AbstractModel(
             returns=[],
             subscripts=[],
             elements=elements_handler.elements,
+            constraints=(),
+            test_inputs=(),
             split=False,
             views_dict=None,
         ),
@@ -195,4 +204,7 @@ model = abstract_model.AbstractModel(
 )
 
 print(model.sections)
-ModelBuilder(model).build_model()
+py_file = ModelBuilder(model).build_model()
+
+model = pysd.load(py_file)
+print(model.run())
