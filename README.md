@@ -11,19 +11,31 @@ Drawio is also open source which is a plus: https://github.com/jgraph/drawio
 
 ## Principles
 
-### Elements creation
 
-Drawio is very flexible for creating custom elements.
-This should really not be an issue as any shape or any container can be used.
+The plugin is a simple javascript file that is loaded by drawio.
 
+The plugins creates new elements in the drawio shapes menu.
+
+Draw.io has *Data* parameters that can be assigned to each shape.
+The elements for pysd have special data fields that contain the relevant 
+pysd information. 
+
+Double clicking on the shape opens a menu where the user can edit
+the fields for the SD element (name, doc, equation, units, ... ).
+(One can modify which fields are available by right clicking on the shape and
+selecting *Edit Data*. )
+
+Once the model is built, draw.io can export the model to a xml file.
+
+The xml file is then read by the parse_xml module which creates a pysd AbstractModel.
+
+This AbstractModel can then be built to any pysd supported format.
 
 ### Conversion from drawio to pysd
 
-This would be relatively easy as drawio saves as a xml format.
-This xml format should contain xml headers that directly connect
-the xml values to pysd values. Example (name, doc, equation, units, ... )
 
-Note that there is also a compressed xml format which might be impossible to parse.
+Draw.io saves by default the diagrams to a compressed xml format 
+which is impossible to parse.
 To convert a file from the compressed to uncompressed: https://drawio-app.com/extracting-the-xml-from-mxfiles/
 or:
 You can to : File-> Export as.. -> XML ...
@@ -31,9 +43,9 @@ Then untick *compressed*
 
 ### Autosuggestion of variable/units during coding
 
-This seems to be tricky to do directly in drawio. An option
-would be create a branch from the main drawio dedicated to writing
-SD programs.
+If a pysd shape is connected to another pysd shape using an arrow,
+the variable name of the target shape is automatically suggested
+in the menu of the equation of the source shape.
 
 ## Plugins with drawio
 
@@ -73,8 +85,11 @@ On windows:
 
 C:\Users\ *username* \AppData\Roaming\draw.io\plugins
 
-## Conclusion
+## For developers
 
-Creating a fork of drawio adding functionality for SD seems like a too complex solution.
-One should simply create one or many plugins that take care of that.
-One shouuld also add direct conversion to pysd and export to python model.
+If you want to develop this plugins, please contact us before via github issues.
+
+### Convenience tips
+
+Create a symbolic link to the plugin file in the drawio plugin folder, so you don't need to load it every time.
+
