@@ -863,8 +863,8 @@ Draw.loadPlugin(function (ui) {
 	// Check the click handler
 	var dblClick = ui.editor.graph.dblClick
 	ui.editor.graph.dblClick = function (evt, cell) {
-		// check if the cell is an edge
-		if (cell != null && !graph.getModel().isEdge(cell)) {
+		// check if the cell is an edge for pysd
+		if (cell != null && !graph.getModel().isEdge(cell) && cell.getAttribute('_pysd_type') != null) {
 			updateOverlays(cell);
 		} else {
 			dblClick.apply(this, arguments);
