@@ -50,6 +50,15 @@ Add the option to the command line:
 
 `drawio --enable-plugins`
 
+On windows, it seems to be enabled by default sometimes but not always.
+You find the exectuable there: 
+
+`C:\Program Files\draw.io\draw.io.exe`
+
+Then launch it with the option:
+
+`drawio.exe --enable-plugins`
+
 ### Location of the plugin file
 
 Once you load the plugin for the first time on the menu, it will be loaded to:
@@ -59,6 +68,10 @@ On linux if you installed with snap:
 ~/snap/drawio/current/.config/draw.io/plugins
 
 Then you can modify the plugin file directly there so you don't need to load it every time.
+
+On windows:
+
+C:\Users\ *username* \AppData\Roaming\draw.io\plugins
 
 ## Conclusion
 
