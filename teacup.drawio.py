@@ -4,6 +4,7 @@ Translated using PySD
 """
 
 from pathlib import Path
+import xarray as xr
 
 from pysd.py_backend.statefuls import Integ
 from pysd import Component
@@ -14,6 +15,8 @@ __data = {"scope": None, "time": lambda: 0}
 
 _root = Path(__file__).parent
 
+
+_subscript_dict = {"Teatype": ["Green Tea", "Black Tea", "Chai"]}
 
 component = Component()
 
@@ -86,6 +89,7 @@ def saveper():
 @component.add(
     name="Teacup Temperature",
     units="C",
+    subscripts=["Teatype"],
     comp_type="Stateful",
     comp_subtype="Integ",
     depends_on={"_integ_teacup_temperature": 1},
@@ -101,13 +105,18 @@ def teacup_temperature():
 
 
 _integ_teacup_temperature = Integ(
-    lambda: -heat_loss_to_room(), lambda: 100.0, "_integ_teacup_temperature"
+    lambda: xr.DataArray(
+        -heat_loss_to_room(), {"Teatype": _subscript_dict["Teatype"]}, ["Teatype"]
+    ),
+    lambda: xr.DataArray(100.0, {"Teatype": _subscript_dict["Teatype"]}, ["Teatype"]),
+    "_integ_teacup_temperature",
 )
 
 
 @component.add(
     name="Heat Loss to Room",
     units="J/s",
+    subscripts=["Teatype"],
     comp_type="Auxiliary",
     comp_subtype="Normal",
     depends_on={
@@ -120,17 +129,25 @@ def heat_loss_to_room():
     """
     The loss of heat to room
     """
-    return (teacup_temperature() - room_temperature()) / characteristic_time()
+    return xr.DataArray(
+        (teacup_temperature() - room_temperature()) / characteristic_time(),
+        {"Teatype": _subscript_dict["Teatype"]},
+        ["Teatype"],
+    )
 
 
 @component.add(
-    name="Characteristic Time", units="-", comp_type="Constant", comp_subtype="Normal"
+    name="Characteristic Time",
+    units="-",
+    subscripts=["Teatype"],
+    comp_type="Constant",
+    comp_subtype="Normal",
 )
 def characteristic_time():
     """
     The time constant for the teacup
     """
-    return 10.0
+    return xr.DataArray(10.0, {"Teatype": _subscript_dict["Teatype"]}, ["Teatype"])
 
 
 @component.add(

@@ -1,0 +1,157 @@
+# This file contains the PySD abstract model of the file teacup.drawio.xml
+# Created on 2023-01-02 16:27:56.940083
+(
+    AbstractSection(
+        name="__main__",
+        path=WindowsPath("teacup.drawio.py"),
+        type="main",
+        params=[],
+        returns=[],
+        subscripts=[
+            AbstractSubscriptRange(
+                name="Teatype",
+                subscripts=["Green Tea", "Black Tea", "Chai"],
+                mapping=[],
+            )
+        ],
+        elements=[
+            AbstractElement(
+                name="Teacup Temperature",
+                components=[
+                    AbstractComponent(
+                        subscripts=(["Teatype"], []),
+                        ast=IntegStructure(
+                            flow=ArithmeticStructure(
+                                operators=["negative"],
+                                arguments=(
+                                    ReferenceStructure(
+                                        reference="Heat Loss to Room", subscripts=None
+                                    ),
+                                ),
+                            ),
+                            initial=100.0,
+                        ),
+                        type="Auxiliary",
+                        subtype="Normal",
+                    )
+                ],
+                units="C",
+                limits=(None, None),
+                documentation="The temperature of the teacup",
+            ),
+            AbstractElement(
+                name="Heat Loss to Room",
+                components=[
+                    AbstractComponent(
+                        subscripts=(["Teatype"], []),
+                        ast=ArithmeticStructure(
+                            operators=["/"],
+                            arguments=[
+                                ArithmeticStructure(
+                                    operators=["-"],
+                                    arguments=[
+                                        ReferenceStructure(
+                                            reference="Teacup Temperature",
+                                            subscripts=None,
+                                        ),
+                                        ReferenceStructure(
+                                            reference="Room Temperature",
+                                            subscripts=None,
+                                        ),
+                                    ],
+                                ),
+                                ReferenceStructure(
+                                    reference="Characteristic Time", subscripts=None
+                                ),
+                            ],
+                        ),
+                        type="Auxiliary",
+                        subtype="Normal",
+                    )
+                ],
+                units="J/s",
+                limits=(None, None),
+                documentation="The loss of heat to room",
+            ),
+            AbstractElement(
+                name="Characteristic Time",
+                components=[
+                    AbstractComponent(
+                        subscripts=(["Teatype"], []),
+                        ast=10.0,
+                        type="Auxiliary",
+                        subtype="Normal",
+                    )
+                ],
+                units="-",
+                limits=(None, None),
+                documentation="The time constant for the teacup",
+            ),
+            AbstractElement(
+                name="Room Temperature",
+                components=[
+                    AbstractComponent(
+                        subscripts=([], []),
+                        ast=20.0,
+                        type="Auxiliary",
+                        subtype="Normal",
+                    )
+                ],
+                units="C",
+                limits=(None, None),
+                documentation="",
+            ),
+            AbstractElement(
+                name="INITIAL TIME",
+                components=[
+                    AbstractComponent(
+                        subscripts=([], []), ast=0.0, type="Auxiliary", subtype="Normal"
+                    )
+                ],
+                units="-",
+                limits=(None, None),
+                documentation="Initial time of the simulation",
+            ),
+            AbstractElement(
+                name="FINAL TIME",
+                components=[
+                    AbstractComponent(
+                        subscripts=([], []),
+                        ast=10.0,
+                        type="Auxiliary",
+                        subtype="Normal",
+                    )
+                ],
+                units="-",
+                limits=(None, None),
+                documentation="Final time of the simulation",
+            ),
+            AbstractElement(
+                name="TIME STEP",
+                components=[
+                    AbstractComponent(
+                        subscripts=([], []), ast=1.0, type="Auxiliary", subtype="Normal"
+                    )
+                ],
+                units="-",
+                limits=(None, None),
+                documentation="Time step of the simulation",
+            ),
+            AbstractElement(
+                name="SAVEPER",
+                components=[
+                    AbstractComponent(
+                        subscripts=([], []), ast=1.0, type="Auxiliary", subtype="Normal"
+                    )
+                ],
+                units="-",
+                limits=(None, None),
+                documentation="The frequency with which output is stored.",
+            ),
+        ],
+        constraints=(),
+        test_inputs=(),
+        split=False,
+        views_dict=None,
+    ),
+)

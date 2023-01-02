@@ -1,47 +1,63 @@
 # drawio_pysd
 
-Note: This is currently in developement.
+Drawio plugin to build [PySD](https://pysd.readthedocs.io) models using [draw.io / diagrams.net](https://www.diagrams.net/).
 
-Investigating the possiblity to build graphically pysd models using drawio
+draw.io is an open source, cross platfrom program to create charts.
 
-Drawio allows to create charts in a very customizable way, which can make
-more beautiful/customizable charts than the tradiction SD software allow.
-
-Drawio is also open source which is a plus: https://github.com/jgraph/drawio
-
-## Principles
+This plugin makes it possible to anyone to build a SD model
+using draw.io. The model can then be converted using the
+python file parse_xml to load the model into PySD (as an AbstractModel), which
+then translates the model to supported languages.
 
 
-The plugin is a simple javascript file that is loaded by drawio.
 
-The plugins creates new elements in the drawio shapes menu.
 
-Draw.io has *Data* parameters that can be assigned to each shape.
-The elements for pysd have special data fields that contain the relevant 
-pysd information. 
+## Features
 
-Double clicking on the shape opens a menu where the user can edit
+The following components are available
+
+* Control Variables (start-end times, timestep and saveper)
+* Constants
+* Subscripts (without the subscripted initial data)
+* Integ Structures
+* Arithmetic Structures
+* PySD functions
+
+## How to use the plugin ?
+
+You can download drawio desktop latest version here: https://get.diagrams.net/
+
+
+The plugin is a simple javascript file that has to be loaded by draw.io: *Data -> Plugins... -> Add... -> Select Files...* . (If it is not possible to select a file, you will have to enable plugins. See instructions below)
+
+The plugin creates new elements in the drawio shapes menu on the left panel.
+
+Double clicking on a PySD elemnts opens a menu where the user can edit
 the fields for the SD element (name, doc, equation, units, ... ).
-(One can modify which fields are available by right clicking on the shape and
-selecting *Edit Data*. )
+
 
 Once the model is built, draw.io can export the model to a xml file.
 
-The xml file is then read by the parse_xml module which creates a pysd AbstractModel.
+The xml file is then read by the parse_xml.py module
+which generate a PySD python model file.
 
-This AbstractModel can then be built to any pysd supported format.
+```
+python parse_xml.py teacup.drawio.xml
+```
+
+
 
 ### Conversion from drawio to pysd
 
 
-Draw.io saves by default the diagrams to a compressed xml format 
+Draw.io saves by default the diagrams to a compressed xml format
 which is impossible to parse.
 To convert a file from the compressed to uncompressed: https://drawio-app.com/extracting-the-xml-from-mxfiles/
 or:
 You can to : File-> Export as.. -> XML ...
 Then untick *compressed*
 
-### Autosuggestion of variable/units during coding
+### Autosuggestion of variables during coding
 
 If a pysd shape is connected to another pysd shape using an arrow,
 the variable name of the target shape is automatically suggested
@@ -63,7 +79,7 @@ Add the option to the command line:
 `drawio --enable-plugins`
 
 On windows, it seems to be enabled by default sometimes but not always.
-You find the exectuable there: 
+You find the exectuable there:
 
 `C:\Program Files\draw.io\draw.io.exe`
 
@@ -89,7 +105,24 @@ C:\Users\ *username* \AppData\Roaming\draw.io\plugins
 
 If you want to develop this plugins, please contact us before via github issues.
 
+Draw.io source code can be found at: https://github.com/jgraph/drawio
+This is useful to understand how drawio works if one wants to modify something.
+
 ### Convenience tips
 
 Create a symbolic link to the plugin file in the drawio plugin folder, so you don't need to load it every time.
 
+### Detailed How it works
+
+Draw.io has *Data* parameters that can be assigned to each shape.
+The elements for pysd have special data fields that contain the relevant
+pysd information.
+One can easily modify the fields are available by right clicking on the shape and
+selecting *Edit Data*, but this might create issues for the parser if one changes some fields.
+
+### Improvements possible
+
+* autosuggest units using a dropdown
+* making the window with the parameters draggable/movable
+* make a pysd menu to the right sidebar for the elements
+* Remaining pysd elements

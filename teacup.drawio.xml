@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="Electron" modified="2022-12-16T21:40:40.766Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.6.2 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36" etag="KTcjwWXvpWRbFU9E3QO_" version="20.6.2" type="device">
+<mxfile host="Electron" modified="2023-01-02T10:50:53.006Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.7.3 Chrome/91.0.4472.164 Electron/13.6.1 Safari/537.36" etag="diC8hHll9XtkSjOxuAkL" version="15.7.3" type="device">
   <diagram id="nHi-_M6qC4rsmJ_72PdH" name="Page-1">
-    <mxGraphModel dx="744" dy="680" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1102" dy="1025" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -41,7 +41,7 @@
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="Characteristic Time" Doc="The time constant for the teacup" Units="-" _initial="10" _pysd_type="AbstractUnchangeableConstant" _equation="" id="4TX2-69w3CT22Hbb08V7-8">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="250" y="220" width="130" height="40" as="geometry" />
+            <mxGeometry x="385" y="230" width="130" height="40" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="4TX2-69w3CT22Hbb08V7-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;curved=1;" parent="1" source="4TX2-69w3CT22Hbb08V7-10" target="4TX2-69w3CT22Hbb08V7-2" edge="1">
@@ -77,6 +77,31 @@
             <mxGeometry x="380" y="130" width="80" height="20" as="geometry" />
           </mxCell>
         </UserObject>
+        <mxCell id="Qoo2zFa52Q9Z_oRCaFWO-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Qoo2zFa52Q9Z_oRCaFWO-1" target="4TX2-69w3CT22Hbb08V7-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qoo2zFa52Q9Z_oRCaFWO-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Qoo2zFa52Q9Z_oRCaFWO-1" target="4TX2-69w3CT22Hbb08V7-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qoo2zFa52Q9Z_oRCaFWO-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Qoo2zFa52Q9Z_oRCaFWO-1" target="4TX2-69w3CT22Hbb08V7-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Teatype" Doc="The type of tea" Units="-" _pysd_type="Subscript" _equation="" _initial="" id="Qoo2zFa52Q9Z_oRCaFWO-1">
+          <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="590" y="140" width="220" height="120" as="geometry">
+              <mxRectangle x="640" y="170" width="70" height="30" as="alternateBounds" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <mxCell id="Qoo2zFa52Q9Z_oRCaFWO-2" value="Green Tea" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1" vertex="1" parent="Qoo2zFa52Q9Z_oRCaFWO-1">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Qoo2zFa52Q9Z_oRCaFWO-3" value="Black Tea" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1" vertex="1" parent="Qoo2zFa52Q9Z_oRCaFWO-1">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Qoo2zFa52Q9Z_oRCaFWO-4" value="Chai" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1" vertex="1" parent="Qoo2zFa52Q9Z_oRCaFWO-1">
+          <mxGeometry y="90" width="220" height="30" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

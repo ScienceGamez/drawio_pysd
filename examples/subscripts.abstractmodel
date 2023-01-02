@@ -1,0 +1,157 @@
+AbstractModel(
+    original_path=WindowsPath("test_subscript_3d_arrays_lengthwise.mdl"),
+    sections=(
+        AbstractSection(
+            name="__main__",
+            path=WindowsPath("test_subscript_3d_arrays_lengthwise.py"),
+            type="main",
+            params=[],
+            returns=[],
+            subscripts=[
+                AbstractSubscriptRange(
+                    name="Third Dimension Subscript",
+                    subscripts=["Depth 1", "Depth 2"],
+                    mapping=[],
+                ),
+                AbstractSubscriptRange(
+                    name="Second Dimension Subscript",
+                    subscripts=["Column 1", "Column 2"],
+                    mapping=[],
+                ),
+                AbstractSubscriptRange(
+                    name="One Dimensional Subscript",
+                    subscripts=["Entry 1", "Entry 2", "Entry 3"],
+                    mapping=[],
+                ),
+            ],
+            elements=[
+                AbstractElement(
+                    name="Three Dimensional Variable",
+                    components=[
+                        AbstractComponent(
+                            subscripts=(
+                                [
+                                    "One Dimensional Subscript",
+                                    "Second Dimension Subscript",
+                                    "Third Dimension Subscript",
+                                ],
+                                [],
+                            ),
+                            ast=ReferenceStructure(
+                                reference="three_dimensional_constant",
+                                subscripts=SubscriptsReferenceStructure(
+                                    subscripts=[
+                                        "One Dimensional Subscript",
+                                        "Second Dimension Subscript",
+                                        "Third Dimension Subscript",
+                                    ]
+                                ),
+                            ),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="",
+                    limits=(None, None),
+                    documentation="",
+                ),
+                AbstractElement(
+                    name="Three Dimensional Constant",
+                    components=[
+                        AbstractComponent(
+                            subscripts=(
+                                [
+                                    "One Dimensional Subscript",
+                                    "Column 1",
+                                    "Third Dimension Subscript",
+                                ],
+                                [],
+                            ),
+                            ast=array([[0.01, 0.02], [0.03, 0.04], [0.05, 0.06]]),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        ),
+                        AbstractComponent(
+                            subscripts=(
+                                [
+                                    "One Dimensional Subscript",
+                                    "Column 2",
+                                    "Third Dimension Subscript",
+                                ],
+                                [],
+                            ),
+                            ast=array([[0.02, 0.05], [0.02, 0.04], [0.05, 0.06]]),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        ),
+                    ],
+                    units="",
+                    limits=(None, None),
+                    documentation="",
+                ),
+                AbstractControlElement(
+                    name="FINAL TIME",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=1,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Month",
+                    limits=(None, None),
+                    documentation="The final time for the simulation.",
+                ),
+                AbstractControlElement(
+                    name="INITIAL TIME",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=0,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Month",
+                    limits=(None, None),
+                    documentation="The initial time for the simulation.",
+                ),
+                AbstractControlElement(
+                    name="SAVEPER",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=ReferenceStructure(
+                                reference="time_step", subscripts=None
+                            ),
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Month",
+                    limits=(0.0, None),
+                    documentation="The frequency with which output is stored.",
+                ),
+                AbstractControlElement(
+                    name="TIME STEP",
+                    components=[
+                        AbstractComponent(
+                            subscripts=([], []),
+                            ast=1,
+                            type="Auxiliary",
+                            subtype="Normal",
+                        )
+                    ],
+                    units="Month",
+                    limits=(0.0, None),
+                    documentation="The time step for the simulation.",
+                ),
+            ],
+            constraints=[],
+            test_inputs=[],
+            split=False,
+            views_dict=None,
+        ),
+    ),
+)

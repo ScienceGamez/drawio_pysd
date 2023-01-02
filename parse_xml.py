@@ -1,4 +1,10 @@
-import re
+"""Parsing xml produced by draw.io to create a PySD model."""
+import argparse
+from datetime import datetime
+from os import PathLike
+import subprocess
+
+from typing import NewType
 from xml.sax.handler import feature_namespaces
 from xml.sax import make_parser
 from pathlib import Path
@@ -7,125 +13,75 @@ import pysd
 from pysd.translators.structures import abstract_expressions, abstract_model
 from pysd.builders.python.python_model_builder import ModelBuilder
 
-# re match variables that can contain spaces but they are always separated from each other by an operator or parenthesis
-# The current code does not work with variables that contain spaces
+
+from equations_parsing import equation_2_ast
 
 
-def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
-    """Convert the equation from the string to the abstract expression."""
-
-    # Variables of the equations can contain spaces
-    # Variables are always separated from each other by an operator
-    # The operators are always separated from each other by a variable
-
-    # We will read and translate the elements one by one
-    # Get the first element
-    # an element can be a variable, a number, a function, a parenthesis, an operator
-    # variables can contain spaces but they are always separated from each other by an operator or parenthesis
-
-    splitted = split_equation(equation)
-    print(splitted)
-    if len(splitted) == 0:
-        raise ValueError("Equation is empty")
-    if len(splitted) == 1:
-        # IF the equation is a number, return the number
-        if re.match(r"^\d+(\.\d+)?$", splitted[0]):
-            return float(splitted[0])
-        # If the equation is a variable, return the variable
-        elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*$", splitted[0]):
-            return abstract_expressions.ReferenceStructure(splitted[0])
-
-        else:
-            raise ValueError(f"Equation {equation} is not valid")
-
-    # Now that we have split around operators we can add the variables
-    # in an arithmetic structure
-
-    # If the equation starts with a negative sign, return a negative structure
-    if splitted[0] == "-":
-        return abstract_expressions.ArithmeticStructure(
-            operators=["negative"], arguments=(equation_2_ast(splitted[1:]),)
-        )
-
-    # Check that the splitted element lenght is odd
-    if len(splitted) % 2 == 0:
-        raise ValueError(f"Equation {equation} is not valid")
-
-    return abstract_expressions.ArithmeticStructure(
-        # operators are the odd elements
-        operators=splitted[1::2],
-        arguments=[equation_2_ast(element) for element in splitted[::2]],
-    )
-
-
-exemple = "38.4 * (7625 +( 98.7 - j)) *(4)* (1 + ab Lol)"
-
-
-def split_equation(equation: str) -> list[str]:
-    """Split the equation in a list by removing parenthesis."""
-    # split the equation in a list by removing parenthesis
-    # but if parenthesis are inside other parenthesis, keep them
-    # This should make sure to remove spaces or parenthesis around the
-    # list elements it returns
-    # exemple = "38.4 * (7625 +(98.7 - j)) * (1 + ab Lol)"
-    # split_equation(exemple) = ['38.4', '*' , '7625 +(98.7 - j)', '*', '1 + ab Lol']
-    # example2 = "1 + ab Lol"
-    # split_equation(example2) = ['1', '+', 'ab Lol']
-
-    elements = []
-    parenthesis = 0
-    element = ""
-    for char in equation:
-        if char == "(":
-            parenthesis += 1
-            element += char
-
-        elif char == ")":
-            parenthesis -= 1
-            element += char
-
-        elif char in ["+", "-", "*", "/"] and parenthesis == 0:
-            # If the parenthesis are closed and the char is an operator, we are at the end of an element
-            # Add the element to the list
-            elements.append(element.strip())
-            # Reset the element
-            element = ""
-            # Add the operator to the list
-            elements.append(char)
-
-        else:
-            # If the parenthesis are not closed or the char is not an operator, we are still in the same element
-            # Add the char to the element
-            element += char
-
-    # Add the last element
-    elements.append(element.strip())
-
-    # Remove empty elements
-    # If an element is surrounded by parenthesis, remove the parenthesis
-    return [
-        element if element[0] != "(" and element[-1] != ")" else element[1:-1]
-        for element in elements
-        if element != ""
-    ]
-
-
-print(split_equation(exemple))
-
-
-print(equation_2_ast(exemple))
+ElementId = NewType("ElementId", str)
 
 
 class PysdElementsHandler(ContentHandler):
+    """Content handler for the xml file from drawio."""
+
+    subscripts: dict[ElementId, abstract_model.AbstractSubscriptRange]
+    elements: dict[ElementId, abstract_model.AbstractElement]
+    connexions: list[tuple[ElementId, ElementId]]
+
     def __init__(self):
         super().__init__()
-        self.elements = []
+        self.elements = {}
+        self.subscripts = {}
+        self.connexions = []
 
     def startElementNS(self, name, qname, attrs):
-        if name[1] == "UserObject":
-            self.create_element(attrs)
+        """Start reading a element from the xml."""
+        match name[1]:
+            case "UserObject":
+                # User objects are the general cells from drawio dedicated to PySD
+                self.create_element(attrs)
+            case "mxCell":
+                try:
+                    # These are other cells or edges
+                    is_edge = bool(int(attrs.getValueByQName("edge")))
+                except KeyError:
+                    try:
+                        # These are other cells or edges
+                        is_edge = not bool(int(attrs.getValueByQName("vertex")))
+                    except KeyError:
+                        is_edge = False
+                if is_edge:
+                    self.process_mxCell_edge(attrs)
+                else:
+                    self.process_mxCell_vertex(attrs)
+
+    def process_mxCell_edge(self, attrs):
+        """Process the mxCell edges.
+
+        edges connect elements
+        """
+        try:
+            source = attrs.getValueByQName("source")
+            target = attrs.getValueByQName("target")
+            self.connexions.append((source, target))
+        except KeyError:
+            pass
+
+    def process_mxCell_vertex(self, attrs):
+        """Process the mxCell vertices.
+
+        vertices can be parts of subscripts (values of the subscripts)
+        """
+        try:
+            parent = attrs.getValueByQName("parent")
+            if parent in self.subscripts:
+                self.subscripts[parent].subscripts.append(
+                    attrs.getValueByQName("value")
+                )
+        except KeyError:
+            pass
 
     def create_element(self, attrs):
+        """Create an element from the xml attributes."""
 
         name = attrs.getValueByQName("Name")
         try:
@@ -138,8 +94,15 @@ class PysdElementsHandler(ContentHandler):
             ast = self.create_ast(pysd_type, equation, attrs)
         except Exception as exp:
             raise ValueError(
-                f"Error while creating the abstract structure for {name}"
+                f"Error while creating the abstract structure"
+                f" for '{pysd_type}: {name}'"
             ) from exp
+
+        id = attrs.getValueByQName("id")
+
+        if isinstance(ast, abstract_model.AbstractSubscriptRange):
+            self.subscripts[id] = ast
+            return
 
         element = abstract_model.AbstractElement(
             name=name,
@@ -152,7 +115,7 @@ class PysdElementsHandler(ContentHandler):
             documentation=attrs.getValueByQName("Doc"),
             units=attrs.getValueByQName("Units"),
         )
-        self.elements.append(element)
+        self.elements[id] = element
 
     def create_ast(self, pysd_type, equation, attrs):
         match pysd_type:
@@ -167,44 +130,104 @@ class PysdElementsHandler(ContentHandler):
                 return equation_2_ast(equation)
             case "AbstractUnchangeableConstant" | "ControlVar":
                 return float(attrs.getValueByQName("_initial"))
-            case _:
-                raise NotImplementedError(
-                    f"pysd_type {pysd_type} not implemented: {equation=} {attrs=} {attrs.getValueByQName('_initial')=}"
+            case "Subscript":
+                ast = abstract_model.AbstractSubscriptRange(
+                    name=attrs.getValueByQName("Name"), subscripts=[], mapping=[]
                 )
 
+                return ast
+            case _:
+                raise NotImplementedError(
+                    f"pysd_type '{pysd_type}' not implemented: {equation=} {dict(attrs)=}"
+                )
 
-parser = make_parser()
-parser.setFeature(feature_namespaces, True)
-elements_handler = PysdElementsHandler()
-parser.setContentHandler(elements_handler)
-
-file_path = Path("teacup.drawio.xml")
-if not file_path.is_file():
-    raise FileNotFoundError(f"{file_path}")
-parser.parse(file_path)
+    def add_subscripts_from_connexions(self):
+        """Add the subscripts to the elements based on the connexions."""
+        for source, target in self.connexions:
+            if source in self.subscripts and target in self.elements:
+                for c in self.elements[target].components:
+                    c.subscripts[0].append(self.subscripts[source].name)
 
 
-model = abstract_model.AbstractModel(
-    file_path,
-    sections=(
-        abstract_model.AbstractSection(
-            name="__main__",
-            path=file_path.with_suffix(".py"),
-            type="main",
-            params=[],
-            returns=[],
-            subscripts=[],
-            elements=elements_handler.elements,
-            constraints=(),
-            test_inputs=(),
-            split=False,
-            views_dict=None,
+def generate_abstract_model(file_path: PathLike) -> abstract_model.AbstractModel:
+    """Generate an abstract model from the drawio file."""
+
+    file_path = Path(file_path)
+    if not file_path.is_file():
+        raise FileNotFoundError(f"{file_path}")
+
+    # Create the xml parser
+    parser = make_parser()
+    parser.setFeature(feature_namespaces, True)
+    elements_handler = PysdElementsHandler()
+    parser.setContentHandler(elements_handler)
+
+    parser.parse(file_path)
+
+    elements_handler.add_subscripts_from_connexions()
+
+    model = abstract_model.AbstractModel(
+        file_path,
+        sections=(
+            abstract_model.AbstractSection(
+                name="__main__",
+                path=file_path.with_suffix(".py"),
+                type="main",
+                params=[],
+                returns=[],
+                subscripts=list(elements_handler.subscripts.values()),
+                elements=list(elements_handler.elements.values()),
+                constraints=(),
+                test_inputs=(),
+                split=False,
+                views_dict=None,
+            ),
         ),
-    ),
-)
+    )
 
-print(model.sections)
-py_file = ModelBuilder(model).build_model()
+    return model
 
-model = pysd.load(py_file)
-print(model.run())
+
+if __name__ == "__main__":
+    # Create an argument reader with one single argument being the path of the file
+    arg_parser = argparse.ArgumentParser()
+    # Add the docstring of this py file as the description of the argument parser
+    arg_parser.description = __doc__
+    arg_parser.add_argument("file_path", type=str, help="Path of the file to parse")
+    # Add a run option to run the file only if selected
+    arg_parser.add_argument(
+        "--run", action="store_true", help="Run the file after parsing it"
+    )
+    # Add argument 'abs' to save the abstract model
+    arg_parser.add_argument(
+        "--abs", action="store_true", help="Save the abstract model"
+    )
+
+    args = arg_parser.parse_args()
+
+    file_path = Path(args.file_path)
+
+    model = generate_abstract_model(file_path)
+
+    print(f"File {file_path} parsed and successfully converted to {model}")
+
+    if args.abs:
+        with open(file_path.with_suffix(".abs"), "w") as f:
+            # add a header to explain what is in the file
+            f.write(
+                f"# This file contains the PySD abstract model of the file {file_path}\n"
+            )
+            # add creation date and time
+            f.write(f"# Created on {datetime.now()}\n")
+            f.write(str(model.sections))
+        # format the file calling black
+        # TODO: call directly the black API instead of calling it as a subprocess
+        subprocess.run(["black", file_path.with_suffix(".abs")])
+
+    py_file = ModelBuilder(model).build_model()
+
+    print(f"File {file_path} parsed and successfully converted to {py_file}")
+
+    if args.run:
+        model = pysd.load(py_file)
+        print(model.run())
