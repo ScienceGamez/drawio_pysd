@@ -1,3 +1,4 @@
+# This was copied from the abstract vensim model from PySD
 AbstractModel(
     original_path=PosixPath("teacup.mdl"),
     sections=(

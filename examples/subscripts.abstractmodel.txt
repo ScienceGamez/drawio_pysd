@@ -1,3 +1,5 @@
+# This was copied from the abstract vensim model from PySD
+
 AbstractModel(
     original_path=WindowsPath("test_subscript_3d_arrays_lengthwise.mdl"),
     sections=(
