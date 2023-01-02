@@ -25,6 +25,7 @@ class PysdElementsHandler(ContentHandler):
 
     subscripts: dict[ElementId, abstract_model.AbstractSubscriptRange]
     elements: dict[ElementId, abstract_model.AbstractElement]
+    references: dict[ElementId, str]
     connexions: list[tuple[ElementId, ElementId]]
 
     def __init__(self):
@@ -32,6 +33,7 @@ class PysdElementsHandler(ContentHandler):
         self.elements = {}
         self.subscripts = {}
         self.connexions = []
+        self.references = {}
 
     def startElementNS(self, name, qname, attrs):
         """Start reading a element from the xml."""
@@ -90,6 +92,14 @@ class PysdElementsHandler(ContentHandler):
             equation = ""
         pysd_type = attrs.getValueByQName("_pysd_type")
 
+        id = attrs.getValueByQName("id")
+
+        if pysd_type == "Reference":
+            # Reference dont have ast but they have to point to
+            # the correct element
+            self.references[id] = name
+            return
+
         try:
             ast = self.create_ast(pysd_type, equation, attrs)
         except Exception as exp:
@@ -98,7 +108,6 @@ class PysdElementsHandler(ContentHandler):
                 f" for '{pysd_type}: {name}'"
             ) from exp
 
-        id = attrs.getValueByQName("id")
 
         if isinstance(ast, abstract_model.AbstractSubscriptRange):
             self.subscripts[id] = ast
@@ -119,8 +128,6 @@ class PysdElementsHandler(ContentHandler):
 
     def create_ast(self, pysd_type, equation, attrs):
         match pysd_type:
-            case "constant":
-                return float(equation)
             case "IntegStructure":
                 return abstract_expressions.IntegStructure(
                     initial=equation_2_ast(attrs.getValueByQName("_initial")),
@@ -141,12 +148,30 @@ class PysdElementsHandler(ContentHandler):
                     f"pysd_type '{pysd_type}' not implemented: {equation=} {dict(attrs)=}"
                 )
 
-    def add_subscripts_from_connexions(self):
+    def _add_subscripts_from_connexions(self):
         """Add the subscripts to the elements based on the connexions."""
         for source, target in self.connexions:
             if source in self.subscripts and target in self.elements:
                 for c in self.elements[target].components:
                     c.subscripts[0].append(self.subscripts[source].name)
+
+    def post_parsing(self):
+        """Modify some elements after the parsing.
+
+        Must be called after the parsing.
+        """
+        # create a mapping variable name -> id
+        # to replace the references
+        mapping = {v.name: k for k, v in self.elements.items()}
+
+        # replaces references in the connexions
+        for i, (source, target) in enumerate(self.connexions):
+            if source in self.references:
+                self.connexions[i] = (mapping[self.references[source]], target)
+            if target in self.references:
+                self.connexions[i] = (source, mapping[self.references[target]])
+
+        self._add_subscripts_from_connexions()
 
 
 def generate_abstract_model(file_path: PathLike) -> abstract_model.AbstractModel:
@@ -164,7 +189,7 @@ def generate_abstract_model(file_path: PathLike) -> abstract_model.AbstractModel
 
     parser.parse(file_path)
 
-    elements_handler.add_subscripts_from_connexions()
+    elements_handler.post_parsing()
 
     model = abstract_model.AbstractModel(
         file_path,

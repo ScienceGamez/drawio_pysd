@@ -10,10 +10,12 @@
  */
 Draw.loadPlugin(function (ui) {
 
+    var default_style = 'html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;';
 
 
-    function createPysdCell(pysdType, name, initial, equation, h = 20, w = 80) {
-        var cell = new mxCell('%Name%', new mxGeometry(0, 0, w, h), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
+    function createPysdCell(pysdType, name, initial = false, equation = false, h = 20, w = 80) {
+        var style = 'text;' + default_style;
+        var cell = new mxCell('%Name%', new mxGeometry(0, 0, w, h), style);
         cell.vertex = true;
         ui.sidebar.graph.setAttributeForCell(cell, 'placeholders', '1');
         ui.sidebar.graph.setAttributeForCell(cell, 'Name', name);
@@ -153,7 +155,15 @@ Draw.loadPlugin(function (ui) {
                 return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Subscript');
 
             })),
+            ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+                var cell = new mxCell('< %Name% >', new mxGeometry(0, 0, 110, 30), 'text;' + default_style + 'textOpacity=70;');
+                cell.vertex = true;
+                ui.sidebar.graph.setAttributeForCell(cell, 'placeholders', '1');
+                ui.sidebar.graph.setAttributeForCell(cell, 'Name', 'new_reference');
 
+                ui.sidebar.graph.setAttributeForCell(cell, '_pysd_type', 'Reference');
+                return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Reference to Variable');
+            })),
             //ui.sidebar.createVertexTemplateFromCells([createPysdCell()], cell.geometry.width, cell.geometry.height, 'Variable'),
         ]
         ui.sidebar.addPaletteFunctions('pysd', 'PySD', true, fns)
@@ -830,6 +840,89 @@ var EquationDialog = function (ui, cell) {
 };
 
 
+/**
+ * Construct a reference dialog.
+ *
+ * It should be a very simple dialog with a title and a drop down menu
+ * This allows to choose the reference for a variable using the drop down menu
+ *
+ * The drop down menu should contain all the variables in the model
+ */
+var ReferenceDialog = function (ui, cell) {
+    var div = document.createElement('div');
+    // Top level element
+    var top = document.createElement('section');
+    top.style.position = 'absolute';
+    top.style.top = '30px';
+    top.style.left = '30px';
+    top.style.right = '30px';
+    top.style.bottom = '80px';
+    top.style.overflowY = 'auto';
+    // create a title for top
+    var topTitle = document.createElement('h3');
+    topTitle.innerHTML = 'Reference to a Variable';
+    top.appendChild(topTitle);
+
+
+    // Adds a drop down menu to choose the referenced variable
+    var select = document.createElement('select');
+
+    // Get all the variables on the graph
+    var variables = ui.editor.graph.getChildVertices(ui.editor.graph.getDefaultParent());
+
+    // Add the variables to the drop down menu
+    for (var i = 0; i < variables.length; i++) {
+        var variable = variables[i];
+
+        // continue the loop if the cell is not a pysd variable
+        // look at the _pysd_type attribute
+        if (variable.getAttribute('_pysd_type') == null || variable.getAttribute('_pysd_type') == 'Reference') {
+            continue;
+        }
+
+        var option = document.createElement('option');
+        option.innerHTML = variable.getAttribute('Name');
+        select.appendChild(option);
+        // If the cell has a attribute Name, then it is a pysd variable
+
+    }
+    // set the default value in the drop down menu
+    // the default value is the current reference of the cell
+    select.value = cell.getAttribute('Name');
+
+    // add cancel and apply buttons
+    var buttons = document.createElement('div');
+    buttons.style.cssText = 'position:absolute;left:30px;right:30px;text-align:right;bottom:30px;height:40px;'
+    var cancelBtn = mxUtils.button(mxResources.get('cancel'), function () {
+        ui.hideDialog();
+    });
+    cancelBtn.className = 'geBtn';
+    var applyBtn = mxUtils.button(mxResources.get('apply'), function () {
+        // add the reference attribute to the cell
+        // the value of the reference attribute is the name of the selected variable
+        cell.setAttribute('Name', select.value);
+        // update what is displayed in the cell
+        ui.editor.graph.refresh(cell);
+        // close the dialog
+        ui.hideDialog();
+    })
+    applyBtn.className = 'geBtn gePrimaryBtn';
+
+
+    buttons.appendChild(cancelBtn);
+    buttons.appendChild(applyBtn);
+
+    top.appendChild(buttons);
+
+    // Add the drop down menu to the top element
+    top.appendChild(select);
+    div.appendChild(top);
+
+
+    this.container = div;
+
+};
+
 // Checks when a cell is created
 // TODO: this doesn't work at the moment
 Draw.loadPlugin(function (ui) {
@@ -865,22 +958,34 @@ Draw.loadPlugin(function (ui) {
     var graph = ui.editor.graph;
 
     // Add a show equation dialog
-    ui.showEquationDialog = function (cell) {
+    showEquationDialog = function (cell) {
         null != cell
             && (
-                cell = new EquationDialog(this, cell),
+                cell = new EquationDialog(ui, cell),
                 // modal, closable, onClose, noScroll, transparent, onResize, ignoreBgClick
-                this.showDialog(cell.container, 480, 420, true, true, null, false, false, null, true),
+                ui.showDialog(cell.container, 480, 420, true, true, null, false, false, null, true),
                 cell.init()
+            )
+    };
+    // add a show reference dialog
+    showReferenceDialog = function (cell) {
+        null != cell
+            && (
+                cell = new ReferenceDialog(ui, cell),
+                // modal, closable, onClose, noScroll, transparent, onResize, ignoreBgClick
+                ui.showDialog(cell.container, 480, 420, true, true, null, false, false, null, true)
             )
     };
 
     function updateOverlays(cell) {
         if (cell != null) {
-            ui.showEquationDialog(cell);
-
-
-        }
+            // if the type of the cell is a refernce show the reference overlay
+            if (cell.getAttribute('_pysd_type') == 'Reference') {
+                showReferenceDialog(cell);
+            } else {
+                showEquationDialog(cell);
+            }
+        };
     };
 
     // Check the click handler

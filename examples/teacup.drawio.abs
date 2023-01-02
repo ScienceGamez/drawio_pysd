@@ -1,9 +1,9 @@
-# This file contains the PySD abstract model of the file teacup.drawio.xml
-# Created on 2023-01-02 16:27:56.940083
+# This file contains the PySD abstract model of the file examples\teacup.drawio.xml
+# Created on 2023-01-02 18:33:03.693842
 (
     AbstractSection(
         name="__main__",
-        path=WindowsPath("teacup.drawio.py"),
+        path=WindowsPath("examples/teacup.drawio.py"),
         type="main",
         params=[],
         returns=[],

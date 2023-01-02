@@ -11,6 +11,9 @@ then translates the model to supported languages.
 
 
 
+![Teacup model example](examples/teacup.png)
+
+
 
 ## Features
 
@@ -22,6 +25,7 @@ The following components are available
 * Integ Structures
 * Arithmetic Structures
 * PySD functions
+* Variable references
 
 ## How to use the plugin ?
 
