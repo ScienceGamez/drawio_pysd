@@ -91,6 +91,14 @@ Then launch it with the option:
 
 `drawio.exe --enable-plugins`
 
+### Enabling plugins on the website diagrams.net
+
+This is currently impossible for security issues
+https://github.com/jgraph/drawio/issues/958#issuecomment-644206032
+
+But one could create a custom website hosting drawio servers with
+the plugin enabled.
+
 ### Location of the plugin file
 
 Once you load the plugin for the first time on the menu, it will be loaded to:
