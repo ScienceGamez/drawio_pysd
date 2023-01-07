@@ -1,0 +1,132 @@
+/** Contains attributes of some js objects from drawio
+Simply to help coding
+ * Attributes of the ui oject
+ * Uncaught
+ *
+ * eventSource
+ * destroyFunctions
+ * editor
+ * container
+ * selectionStateListener
+ * actions
+ * customLayoutConfig
+ * addInsertItem
+ * addInsertMenuItems
+ * menus
+ * setDefaultStyle
+ * clearDefaultStyle
+ * insertHandler
+ * menubarContainer
+ * toolbarContainer
+ * sidebarContainer
+ * formatContainer
+ * diagramContainer
+ * footerContainer
+ * hsplit
+ * tabContainer
+ * eventListeners
+ * menubar
+ * statusContainer
+ * sidebar
+ * format
+ * toolbar
+ * hoverIcons
+ * keydownHandler
+ * keyupHandler
+ * keyHandler
+ * getKeyHandler
+ * gestureHandler
+ * resizeHandler
+ * orientationChangeHandler
+ * formatWidth
+ * selectionState
+ * defaultFilename
+ * isSelectionAllowed
+ * spinner
+ * ruler
+ * onKeyDown
+ * updatePasteActionStates
+ * defaultLibraryName
+ * descriptorChangedListener
+ * gitHub
+ * gitLab
+ * bg
+ * mode
+ * appIcon
+ * fnameWrapper
+ * fname
+ * toggleFormatElement
+ * fullscreenElement
+ * toggleElement
+ * buttonContainer
+ * userElement
+ * stateArg
+ * loadedLibraries
+ * fileLoadedError
+ * fileEditable
+ * currentFile
+ * dialogs
+ * dialog
+ * database
+ * scratchpad
+ * currentPage
+ * fileNode
+ * pages
+ *
+ *
+ * Pages have (each page)
+ * node root graphModelNode viewState
+ *
+ * page.root
+ * value geometry style id target source parent children mxObjectId
+ *
+ * page.viewState
+ * gridEnabled
+ * gridSize
+ * guidesEnabled
+ * foldingEnabled
+ * shadowVisible
+ * pageVisible
+ * background
+ * backgroundImage
+ * pageScale
+ * pageFormat
+ * tooltips
+ * connect
+ * arrows
+ * mathEnabled
+ * selectionCells
+ * defaultParent
+ * scrollbars
+ * scale
+ * hiddenTags
+ * extFonts
+ *
+ * ui.editor
+ *
+ * eventSource
+ * chromeless
+ * graph
+ * editable
+ * undoListener
+ * undoManager
+ * status
+ * getOrCreateFilename
+ * getFilename
+ * setStatus
+ * getStatus
+ * graphChangeListener
+ * eventListeners
+ * getEditBlankUrl
+ * autosave
+ * statusFunction
+ * modified
+ *
+ * ui.editor.graph
+ *
+ * mouseListeners renderHint dialect model multiplicities imageBundles cellRenderer selectionModel stylesheet view graphModelChangeListener tooltipHandler selectionCellsHandler eventListeners connectionHandler graphHandler panningHandler popupMenuHandler themes currentEdgeStyle currentVertexStyle standalone domainUrl domainPathUrl isHtmlLabel dropEnabled allowLoops allowAutoPanning resetEdgesOnConnect constrainChildren constrainRelativeChildren alternateEdgeStyle currentStyle getRubberband isToggleEvent click getCursorForMouseEvent getCursorForCell selectRegion isCellLocked updateMouseEvent currentTranslate transparentBackground isCssTransformsSupported isBlankLink resetViewOnRootChange lightbox getGraphBounds container cellEditor layoutManager hiddenTags freehand isMouseInsertPoint getInsertPoint globalVars isZoomWheelEvent fireMouseEvent mathEnabled useCssTransforms gridEnabled foldingEnabled scrollbars pageVisible pageBreaksVisible preferPageSize background pageScale pageFormat currentScale getLinkTitle customLinkClicked parseBackgroundImage setBackgroundImage getBackgroundImageObject addClickHandler dblClick setDefaultParent editLink timerAutoScroll getPagePadding getPreferredPageSize sizeDidChange cumulativeZoomFactor lazyZoom getExportVariables getGlobalVariable labelLinkClicked minimumGraphSize autoTranslate enableFlowAnimation removeCells duplicateCells moveCells connectVertex getSubtree enabled defaultParent backgroundImage shadowVisible gridSize connectionArrowsEnabled lastEvent isMouseDown isMouseTrigger lastMouseX lastMouseY firstClickState firstClickSource tapAndHoldInProgress tapAndHoldValid
+ *
+ *
+ * ui.editor.graph.model
+ *
+ * currentEdit root nextId cells updateLevel endingUpdate eventListeners dx dy grid gridSize guides tooltips connect arrows fold page pageScale pageWidth pageHeight math shadow prefix
