@@ -107,6 +107,10 @@ On linux if you installed with snap:
 
 ~/snap/drawio/current/.config/draw.io/plugins
 
+If installed with apt:
+
+~/.config/draw.io/plugins/pysd.js
+
 Then you can modify the plugin file directly there so you don't need to load it every time.
 
 On windows:
