@@ -235,11 +235,6 @@ Draw.loadPlugin(function (ui) {
     }
 });
 
-// Keep int track all the variables and their elements
-var variables_dict = {};
-Draw.loadPlugin(function (ui) {
-
-});
 
 
 
@@ -539,23 +534,30 @@ var EquationDialog = function (ui, cell) {
     top.appendChild(propertiesForm.table);
 
 
-    // If the cell has an attribute named _initial, create a text area for editing the _initial value
+    // If the cell is of a type that need an inital value,
+    // create a text area for editing the _initial value
     var initialArea = document.createElement('textarea');
-    if (value.getAttribute('_initial') != null) {
+    if (
+        value.getAttribute('_pysd_type') == 'IntegStructure'
+        || value.getAttribute('_pysd_type') == 'AbstractUnchangeableConstant'
+        || value.getAttribute('_pysd_type') == 'ControlVar'
+    ) {
         var initialAreaDiv = document.createElement('div');
         // add a title in the div
         var initialAreaTitle = document.createElement('h3');
-        initialAreaTitle.innerHTML = "Initial Value";
+
+        if( value.getAttribute('_pysd_type') == 'IntegStructure') {
+            initialAreaTitle.innerHTML = "Initial Value";
+        } else {
+            initialAreaTitle.innerHTML = "Value";
+        }
         initialAreaDiv.appendChild(initialAreaTitle);
-
-
         initialAreaDiv.appendChild(initialArea);
 
         initialArea.value = value.getAttribute('_initial');
         // add to top
         top.appendChild(initialAreaDiv);
     }
-
 
 
     for (var i = 0; i < temp.length; i++) {
@@ -588,7 +590,27 @@ var EquationDialog = function (ui, cell) {
         }
     }
 
+    // Will return the equation of the cell
+    function guessEquation(cell){
+        var equation = "";
 
+        // check if the arrow connecting the children is in or out
+        var edges = cell.edges;
+        for (var j = 0; j < edges.length; j++) {
+            var edge = edges[j];
+            if (edge.target.value == cell.value) {
+                equation += " + ";
+                // add the variable name
+                equation += edge.source.value.getAttribute('Name');
+            } else {
+                equation += " - ";
+                // add the variable name
+                equation += edge.target.value.getAttribute('Name');
+            }
+        }
+
+        return equation;
+    }
 
 
 
@@ -607,6 +629,19 @@ var EquationDialog = function (ui, cell) {
         var equationTitle = document.createElement('h3');
         equationTitle.innerHTML = "Equation";
         equationTitleDiv.appendChild(equationTitle);
+
+        // if Integ, we want to have a guess button to guess what is the equation
+        if (value.getAttribute('_pysd_type') == 'IntegStructure') {
+            equationTitle.innerHTML = "Flux";
+
+            var guessButton = document.createElement('button');
+            guessButton.innerHTML = "Guess";
+            guessButton.onclick = function () {
+                equationArea.value = guessEquation(cell);
+            }
+            equationTitleDiv.appendChild(guessButton);
+        }
+
 
         // set initial value in the equation area
         equationArea.value = cell.getAttribute('_equation');
@@ -868,6 +903,7 @@ var ReferenceDialog = function (ui, cell) {
     var select = document.createElement('select');
 
     // Get all the variables on the graph
+    // TODO currently this only applies to the current page, we need to get all the variables in the model
     var variables = ui.editor.graph.getChildVertices(ui.editor.graph.getDefaultParent());
 
     // Add the variables to the drop down menu
