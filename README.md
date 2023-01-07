@@ -142,3 +142,4 @@ selecting *Edit Data*, but this might create issues for the parser if one change
 * making the window with the parameters draggable/movable
 * make a pysd menu to the right sidebar for the elements
 * Remaining pysd elements
+* making the possiblity to use references from different pages, and in general multipages suppport
