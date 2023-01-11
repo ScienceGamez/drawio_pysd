@@ -143,3 +143,5 @@ selecting *Edit Data*, but this might create issues for the parser if one change
 * make a pysd menu to the right sidebar for the elements
 * Remaining pysd elements
 * making the possiblity to use references from different pages, and in general multipages suppport
+* Use directly the .drawio files instead of the xml files, because they are the same if the format is uncompressed
+* Positioning the elements properly in the drawio generated file
