@@ -1,6 +1,7 @@
 """Parsing xml produced by draw.io to create a PySD model."""
 import argparse
 from datetime import datetime
+import logging
 from os import PathLike
 import subprocess
 
@@ -90,7 +91,11 @@ class PysdElementsHandler(ContentHandler):
             equation = attrs.getValueByQName("_equation")
         except KeyError:
             equation = ""
-        pysd_type = attrs.getValueByQName("_pysd_type")
+        # Check if a key is in the attrs
+        try:
+            pysd_type = attrs.getValueByQName("_pysd_type")
+        except KeyError:
+            pysd_type = "AbstractElement"
 
         id = attrs.getValueByQName("id")
 
@@ -105,13 +110,22 @@ class PysdElementsHandler(ContentHandler):
         except Exception as exp:
             raise ValueError(
                 f"Error while creating the abstract structure"
-                f" for '{pysd_type}: {name}'"
+                f" for '{pysd_type}: {name}': {exp}"
             ) from exp
 
 
         if isinstance(ast, abstract_model.AbstractSubscriptRange):
             self.subscripts[id] = ast
             return
+
+        try:
+            units = attrs.getValueByQName("Units")
+        except KeyError:
+            units = ""
+        try:
+            doc = attrs.getValueByQName("Doc")
+        except KeyError:
+            doc = ""
 
         element = abstract_model.AbstractElement(
             name=name,
@@ -121,8 +135,8 @@ class PysdElementsHandler(ContentHandler):
                     ast=ast,
                 )
             ],
-            documentation=attrs.getValueByQName("Doc"),
-            units=attrs.getValueByQName("Units"),
+            documentation=doc,
+            units=units,
         )
         self.elements[id] = element
 
@@ -145,7 +159,7 @@ class PysdElementsHandler(ContentHandler):
                 return ast
             case _:
                 raise NotImplementedError(
-                    f"pysd_type '{pysd_type}' not implemented: {equation=} {dict(attrs)=}"
+                    f"pysd_type '{pysd_type}' not implemented."
                 )
 
     def _add_subscripts_from_connexions(self):
@@ -227,8 +241,34 @@ if __name__ == "__main__":
     arg_parser.add_argument(
         "--abs", action="store_true", help="Save the abstract model"
     )
+    # Add log and debug options
+    arg_parser.add_argument(
+        "-d",
+        "--debug",
+        help="Debugging statements",
+        action="store_const",
+        dest="loglevel",
+        const=logging.DEBUG,
+        default=logging.WARNING,
+    )
+    arg_parser.add_argument(
+        "-v",
+        "--verbose",
+        "--info",
+        help="Write out the output",
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
+    )
 
     args = arg_parser.parse_args()
+
+    # Set the logging value
+    logging.basicConfig()
+    logger = logging.getLogger("drawio_pysd")
+    logger.setLevel(args.loglevel)
+    logger.debug(args)
+
 
     file_path = Path(args.file_path)
 
