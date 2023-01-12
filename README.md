@@ -40,13 +40,13 @@ Double clicking on a PySD elemnts opens a menu where the user can edit
 the fields for the SD element (name, doc, equation, units, ... ).
 
 
-Once the model is built, draw.io can export the model to a xml file.
+Once the model is built, draw.io can export the model to a xml file (with a .drawio extension ).
 
-The xml file is then read by the parse_xml.py module
+The .drawio file is then read by the parse_drawio.py module
 which generate a PySD python model file.
 
 ```
-python parse_xml.py teacup.drawio.xml
+python parse_drawio.py teacup.drawio
 ```
 
 
@@ -58,7 +58,7 @@ Draw.io saves by default the diagrams to a compressed xml format
 which is impossible to parse.
 To convert a file from the compressed to uncompressed: https://drawio-app.com/extracting-the-xml-from-mxfiles/
 or:
-You can to : File-> Export as.. -> XML ...
+You can go to : File-> Properties..
 Then untick *compressed*
 
 ### Autosuggestion of variables during coding

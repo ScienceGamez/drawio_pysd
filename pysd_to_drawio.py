@@ -32,9 +32,9 @@ from pysd.translators.structures.abstract_model import AbstractSubscriptRange
 from pysd.translators.structures import abstract_expressions
 from pysd.py_backend.external import ExtSubscript
 
-from parse_xml import generate_abstract_model
+from parse_drawio import generate_abstract_model
 
-      
+
 @dataclass
 class CellGeometry:
     position: tuple(int, int)
@@ -72,7 +72,7 @@ class ModelBuilder:
     def build_model(self) -> Path:
         """
         Build the Python model in a file callled as the orginal model
-        but with '.drawio.xml' suffix.
+        but with '.drawio' suffix.
 
         Returns
         -------
@@ -121,8 +121,8 @@ class SectionBuilder:
         self.params = {key: self.namespace.namespace[key] for key in self.params}
 
         self._init_xml()
-        
-        
+
+
 
 
     def _init_xml(self):
@@ -175,7 +175,7 @@ class SectionBuilder:
         None
 
         """
-            
+
         element_by_id: dict[str, ElementBuilder] = {}
         id_of_name: dict[str, str] = {}
         # Build elements
@@ -197,11 +197,11 @@ class SectionBuilder:
 
             geometry = CellGeometry((0, i * 100), (100, 50))
 
-            
+
             mx_cell.appendChild(geometry.addAttributes(self.xml_root))
             xml_element.appendChild(mx_cell)
             self.graph_root.appendChild(xml_element)
-        
+
         # Add the edges
         for id, element in element_by_id.items():
             for dep in set(element.dependencies):
@@ -230,7 +230,7 @@ class SectionBuilder:
 
         xml_str = self.xml_root.toprettyxml(indent="\t")
 
-        with self.path.with_suffix(".drawio.xml").open("w", encoding="UTF-8") as out:
+        with self.path.with_suffix(".drawio").open("w", encoding="UTF-8") as out:
             out.write(xml_str)
 
 
@@ -332,7 +332,7 @@ class ElementBuilder:
 
     def ast_to_equation(self, ast: abstract_expressions.ArithmeticStructure | abstract_expressions.ReferenceStructure | int | float) -> str:
         """Convert an ast to a string equation.
-        
+
         This always return a string.
         It also add new dependencies when necessary.
         """
@@ -363,7 +363,7 @@ class ElementBuilder:
             case abstract_expressions.CallStructure():
                 return f"{self.ast_to_equation(ast.function)}({', '.join(self.ast_to_equation(arg) for arg in ast.arguments)})"
             case _:
-                raise NotImplementedError(f"ast_to_equation not implemented for {ast}")            
+                raise NotImplementedError(f"ast_to_equation not implemented for {ast}")
 
     def build_element(self) -> minidom.Element:
         """
@@ -380,7 +380,7 @@ class ElementBuilder:
 
             userobject_xml.setAttribute(key, str(value))
 
-        
+
 
 
         return userobject_xml
@@ -804,14 +804,14 @@ if __name__ == "__main__":
 
 
     from examples.ghg_abstract import model as abs_model
-    #abs_model = generate_abstract_model("examples/teacup.drawio.xml")
+    #abs_model = generate_abstract_model("examples/teacup.drawio")
 
 
     # save the abs model to a file
     abs_fname = abs_model.original_path.with_suffix('.xmlabs')
     with open(abs_fname, "w", encoding="UTF-8") as f:
         f.write(repr(abs_model))
-        # format with black 
+        # format with black
     subprocess.run(["black", str(abs_fname)])
 
     m = ModelBuilder(abs_model)
