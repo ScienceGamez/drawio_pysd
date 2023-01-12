@@ -256,6 +256,7 @@ class ElementBuilder:
 
     xml_element: minidom.Element
     dependencies: list[str]
+    control_var: bool
 
 
     def __init__(self, abstract_element: AbstractElement, section: SectionBuilder):
@@ -372,6 +373,9 @@ class ElementBuilder:
         """
 
         userobject_xml = self.section.xml_root.createElement("UserObject")
+
+        if self.control_var:
+            self.xml_attributes["_pysd_type"]  = "ControlVar"
 
         self.parse_components()
 
