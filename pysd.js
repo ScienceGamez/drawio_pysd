@@ -88,7 +88,7 @@ Draw.loadPlugin(function (ui) {
                 return ui.sidebar.createVertexTemplateFromCells(cells, cell.geometry.width, cell.geometry.height, 'Control Variables');
             })),
             ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
-                var cell = createPysdCell('AbstractComponent', "new_variable", false, true);
+                var cell = createPysdCell('AbstractElement', "new_variable", false, true);
                 return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Variable');
             })),
             ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {

@@ -24,7 +24,7 @@
         <mxCell id="3mpkzr2aiVaWu9UwHeaH-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="3mpkzr2aiVaWu9UwHeaH-5" target="3mpkzr2aiVaWu9UwHeaH-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Acceleration" Doc="" Units="m/s^2" _equation=" Sum of Forces /  Mass " _pysd_type="AbstractComponent" _initial="" id="3mpkzr2aiVaWu9UwHeaH-5">
+        <UserObject label="%Name%" placeholders="1" Name="Acceleration" Doc="" Units="m/s^2" _equation=" Sum of Forces /  Mass " _pysd_type="AbstractElement" _initial="" id="3mpkzr2aiVaWu9UwHeaH-5">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
             <mxGeometry x="510" y="330" width="80" height="20" as="geometry" />
           </mxCell>
@@ -32,7 +32,7 @@
         <mxCell id="3mpkzr2aiVaWu9UwHeaH-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="3mpkzr2aiVaWu9UwHeaH-7" target="3mpkzr2aiVaWu9UwHeaH-5" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Sum of Forces" Doc="The sum of all the forces applied on the system" Units="N" _equation="" _pysd_type="AbstractComponent" _initial="" id="3mpkzr2aiVaWu9UwHeaH-7">
+        <UserObject label="%Name%" placeholders="1" Name="Sum of Forces" Doc="The sum of all the forces applied on the system" Units="N" _equation="" _pysd_type="AbstractElement" _initial="" id="3mpkzr2aiVaWu9UwHeaH-7">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
             <mxGeometry x="330" y="370" width="100" height="50" as="geometry" />
           </mxCell>
