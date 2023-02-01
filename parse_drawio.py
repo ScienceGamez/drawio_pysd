@@ -317,12 +317,9 @@ if __name__ == "__main__":
                     if param not in results_df.columns:
                         logger.warning(f'Parameter {param} not in the simulation outputs')
                         continue
-                    ax.plot(x, results_df[param], label=param)
-                # Plot the different param list on different axes
-                ax.legend()
-                ax = ax.twinx()
+                    ax.plot(x, results_df[param], label=f"{param}")
             # Supress the last created ax that is useless
-            del ax
+            ax.legend()
             plt.show()
     else:
         if args.plot_params:
