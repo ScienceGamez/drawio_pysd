@@ -284,7 +284,7 @@ if __name__ == "__main__":
     print(f"File {file_path} parsed and successfully converted to {model}")
 
     if args.abs:
-        with open(file_path.with_suffix(".abs"), "w") as f:
+        with open(file_path.with_suffix(".abs"), "w", encoding="utf-8") as f:
             # add a header to explain what is in the file
             f.write(
                 f"# This file contains the PySD abstract model of the file {file_path}\n"
