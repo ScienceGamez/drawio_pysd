@@ -113,7 +113,6 @@ class PysdElementsHandler(ContentHandler):
                 f" for '{pysd_type}: {name}': {exp}"
             ) from exp
 
-
         if isinstance(ast, abstract_model.AbstractSubscriptRange):
             self.subscripts[id] = ast
             return
@@ -158,9 +157,7 @@ class PysdElementsHandler(ContentHandler):
 
                 return ast
             case _:
-                raise NotImplementedError(
-                    f"pysd_type '{pysd_type}' not implemented."
-                )
+                raise NotImplementedError(f"pysd_type '{pysd_type}' not implemented.")
 
     def _add_subscripts_from_connexions(self):
         """Add the subscripts to the elements based on the connexions."""
@@ -260,6 +257,17 @@ if __name__ == "__main__":
         dest="loglevel",
         const=logging.INFO,
     )
+    # Add a plot parameters which arguments will be plotted
+    arg_parser.add_argument(
+        "-p",
+        "--plot",
+        nargs="+",
+        type=str,
+        default=[],
+        help="Plot parameters",
+        dest="plot_params",
+        action="append",
+    )
 
     args = arg_parser.parse_args()
 
@@ -268,7 +276,6 @@ if __name__ == "__main__":
     logger = logging.getLogger("drawio_pysd")
     logger.setLevel(args.loglevel)
     logger.debug(args)
-
 
     file_path = Path(args.file_path)
 
@@ -295,4 +302,30 @@ if __name__ == "__main__":
 
     if args.run:
         model = pysd.load(py_file)
-        print(model.run())
+        results_df = model.run()
+        print(results_df.columns)
+
+        if args.plot_params:
+
+            # Plot all the variables in the results
+            import matplotlib.pyplot as plt
+
+            fig, ax = plt.subplots()
+            x = results_df.index
+            for param_list in args.plot_params:
+                for param in param_list:
+                    if param not in results_df.columns:
+                        logger.warning(f'Parameter {param} not in the simulation outputs')
+                        continue
+                    ax.plot(x, results_df[param], label=param)
+                # Plot the different param list on different axes
+                ax.legend()
+                ax = ax.twinx()
+            # Supress the last created ax that is useless
+            del ax
+            plt.show()
+    else:
+        if args.plot_params:
+            logger.warning(
+                "Cannot plot if the model is not run, add --run in the command line args"
+            )
