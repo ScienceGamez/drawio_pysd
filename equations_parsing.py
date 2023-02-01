@@ -41,19 +41,25 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
         elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*$", splitted[0]):
             return abstract_expressions.ReferenceStructure(splitted[0])
         # If the equation is a function, return the function
-        elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*\([a-zA-Z0-9_ ,]*\)$", splitted[0]):
+        # inside the function parenthesis, there can be anything, also special characters
+        elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*\([a-zA-Z0-9_*_ _\-_/_^()+,]*\)$", splitted[0]):
             # Get the function name
             function_name = splitted[0].split("(")[0]
+            remaining = '('.join(splitted[0].split("(")[1:])
+            # Take only what is inside the parenthesis
+            inside_parenthesis = remaining.split(")")
+            if len(inside_parenthesis) > 1:
+                inside_parenthesis = ')'.join(inside_parenthesis[:-1])
+            else:
+                inside_parenthesis = inside_parenthesis[0]
             # Get the arguments
-            arguments = splitted[0].split("(")[1][:-1].split(",")
+            arguments = inside_parenthesis.split(",")
             logger.debug(f"equation_2_ast({function_name=}, {arguments=})")
             # Return the function
             return abstract_expressions.CallStructure(
                 abstract_expressions.ReferenceStructure(function_name),
                 arguments=[equation_2_ast(arg) for arg in arguments if arg],
             )
-
-
         else:
             raise ValueError(f"Equation '{equation}' is not valid")
 
@@ -93,7 +99,7 @@ def split_equation(equation: str) -> list[str]:
     element = ""
 
     for char in equation:
-        logger.debug(f"split_equation: {char=}, {element=}")
+        #logger.debug(f"split_equation: {char=}, {element=}")
         if char == "(":
             parenthesis += 1
             element += char
