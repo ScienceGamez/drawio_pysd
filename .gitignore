@@ -4,3 +4,7 @@
 .$*.dtmp
 
 current_model.txt
+
+examples/*.py
+examples/*.abs
+
