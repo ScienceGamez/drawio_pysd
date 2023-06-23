@@ -23,7 +23,7 @@ def var_name_to_safe_name(var_name: str) -> str:
     """
 
     # Replace spaces with underscores and lower
-    safe_name = var_name.replace(" ", "_").lower()
+    safe_name = var_name.strip().replace(" ", "_").lower()
 
     return safe_name
 

@@ -15,7 +15,7 @@ from pysd.translators.structures import abstract_expressions, abstract_model
 from pysd.builders.python.python_model_builder import ModelBuilder
 
 
-from equations_parsing import equation_2_ast
+from equations_parsing import equation_2_ast, var_name_to_safe_name
 
 
 ElementId = NewType("ElementId", str)
@@ -28,6 +28,7 @@ class PysdElementsHandler(ContentHandler):
     elements: dict[ElementId, abstract_model.AbstractElement]
     references: dict[ElementId, str]
     connexions: list[tuple[ElementId, ElementId]]
+    safe_names: dict[str, ElementId]
 
     def __init__(self):
         super().__init__()
@@ -35,6 +36,7 @@ class PysdElementsHandler(ContentHandler):
         self.subscripts = {}
         self.connexions = []
         self.references = {}
+        self.safe_names = {}
 
     def startElementNS(self, name, qname, attrs):
         """Start reading a element from the xml."""
@@ -86,7 +88,7 @@ class PysdElementsHandler(ContentHandler):
     def create_element(self, attrs):
         """Create an element from the xml attributes."""
 
-        name = attrs.getValueByQName("Name")
+        name = attrs.getValueByQName("Name").strip()
         try:
             equation = attrs.getValueByQName("_equation")
         except KeyError:
@@ -125,6 +127,16 @@ class PysdElementsHandler(ContentHandler):
             doc = attrs.getValueByQName("Doc")
         except KeyError:
             doc = ""
+        
+        # Check that the name is unique in safe_name space
+        safe_name = var_name_to_safe_name(name)
+        if safe_name in self.safe_names:
+            raise ValueError(
+                f"Variables '{name}' and '{self.safe_names[safe_name]}' "
+                f"have the same safe name '{safe_name}'.\n"
+                "Please change one of the names."
+            )
+        self.safe_names[safe_name] = name
 
         element = abstract_model.AbstractElement(
             name=name,
