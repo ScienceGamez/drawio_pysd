@@ -8,17 +8,25 @@ from pysd.translators.structures import abstract_expressions
 
 logger = logging.getLogger("drawio_pysd.equations_parsing")
 
+_operators_precedence = {
+    "^": 4,
+    "*": 3,
+    "/": 3,
+    "+": 2,
+    "-": 2,
+}
+
 
 def var_name_to_safe_name(var_name: str) -> str:
     """Convert a variable name to a safe name for pysd.
-    
+
     This should not be necessary if one would argue that each model
     builder would be responsible for making the names safe.
 
-    But PySD people did not want to do that: 
+    But PySD people did not want to do that:
     https://github.com/SDXorg/pysd/pull/399
 
-    So now the abstract model has variable names and 'safe' names in 
+    So now the abstract model has variable names and 'safe' names in
     the reference structures.
     """
 
@@ -26,6 +34,7 @@ def var_name_to_safe_name(var_name: str) -> str:
     safe_name = var_name.strip().replace(" ", "_").lower()
 
     return safe_name
+
 
 def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
     """Convert the equation from the string to the abstract expression."""
@@ -62,14 +71,16 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
             return abstract_expressions.ReferenceStructure(safe_var)
         # If the equation is a function, return the function
         # inside the function parenthesis, there can be anything, also special characters
-        elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*\([a-zA-Z0-9_*_ _\-_/_^()+,]*\)$", splitted[0]):
+        elif re.match(
+            r"^[a-zA-Z_][a-zA-Z0-9_ ]*\([a-zA-Z0-9_*_ _\-_/_^()+,]*\)$", splitted[0]
+        ):
             # Get the function name
             function_name = splitted[0].split("(")[0]
-            remaining = '('.join(splitted[0].split("(")[1:])
+            remaining = "(".join(splitted[0].split("(")[1:])
             # Take only what is inside the parenthesis
             inside_parenthesis = remaining.split(")")
             if len(inside_parenthesis) > 1:
-                inside_parenthesis = ')'.join(inside_parenthesis[:-1])
+                inside_parenthesis = ")".join(inside_parenthesis[:-1])
             else:
                 inside_parenthesis = inside_parenthesis[0]
             # Get the arguments
@@ -96,11 +107,51 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
     if len(splitted) % 2 == 0:
         raise ValueError(f"Equation {equation} is not valid")
 
-    return abstract_expressions.ArithmeticStructure(
-        # operators are the odd elements
-        operators=splitted[1::2],
-        arguments=[equation_2_ast(element) for element in splitted[::2]],
-    )
+    operators = splitted[1::2]
+    elements = splitted[::2]
+
+    # Check that all the operators have the same precedence
+    # Check all operatores are registerd
+    for op in operators:
+        if op not in _operators_precedence:
+            raise ValueError(
+                f"Operator {op} is not valid, only {_operators_precedence.keys()} are valid"
+            )
+    precedences = [_operators_precedence[op] for op in operators]
+
+    if all(precedences[0] == prec for prec in precedences):
+        return abstract_expressions.ArithmeticStructure(
+            # operators are the odd elements
+            operators=operators,
+            arguments=[equation_2_ast(el) for el in elements],
+        )
+    
+    # If not all operators have the same precedence, we need to goup the equation
+    # we split at the max precedence operator
+
+    idx_max = precedences.index(max(precedences))
+
+    # Create a new equation which will ensure the precedence is respected
+    # and splitted, using parenthesis
+    equation = ""
+    for i in range(len(operators)):
+        if i == idx_max or (i==0 and idx_max == 0):
+            # Add parenthesis for precedence at the most precendence operator
+            equation += "("
+        equation += f"({elements[i]})"
+        if i == idx_max + 1: 
+            equation += ")"
+        equation += operators[i]
+
+    equation += f"({elements[-1]})"
+    if idx_max == len(operators) - 1:
+        equation += ")"
+
+    return equation_2_ast(equation)
+        
+
+    
+
 
 
 def split_equation(equation: str) -> list[str]:
@@ -119,7 +170,7 @@ def split_equation(equation: str) -> list[str]:
     element = ""
 
     for char in equation:
-        #logger.debug(f"split_equation: {char=}, {element=}")
+        # logger.debug(f"split_equation: {char=}, {element=}")
         if char == "(":
             parenthesis += 1
             element += char
@@ -157,7 +208,6 @@ def split_equation(equation: str) -> list[str]:
 
 
 if __name__ == "__main__":
-
     exemple = "38.4 * (7625 +( 98.7 - j)) *(4)* (1 + ab Lol)"
 
     print(split_equation(exemple))
