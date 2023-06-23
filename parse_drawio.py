@@ -284,7 +284,8 @@ if __name__ == "__main__":
     print(f"File {file_path} parsed and successfully converted to {model}")
 
     if args.abs:
-        with open(file_path.with_suffix(".abs"), "w") as f:
+        abs_file = file_path.with_name(file_path.name + ".abs")
+        with open(abs_file, "w") as f:
             # add a header to explain what is in the file
             f.write(
                 f"# This file contains the PySD abstract model of the file {file_path}\n"
@@ -294,7 +295,7 @@ if __name__ == "__main__":
             f.write(str(model.sections))
         # format the file calling black
         # TODO: call directly the black API instead of calling it as a subprocess
-        subprocess.run(["black", file_path.with_suffix(".abs")])
+        subprocess.run(["black", abs_file])
 
     py_file = ModelBuilder(model).build_model()
 
