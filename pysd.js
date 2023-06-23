@@ -546,7 +546,7 @@ var EquationDialog = function (ui, cell) {
         // add a title in the div
         var initialAreaTitle = document.createElement('h3');
 
-        if( value.getAttribute('_pysd_type') == 'IntegStructure') {
+        if (value.getAttribute('_pysd_type') == 'IntegStructure') {
             initialAreaTitle.innerHTML = "Initial Value";
         } else {
             initialAreaTitle.innerHTML = "Value";
@@ -591,7 +591,7 @@ var EquationDialog = function (ui, cell) {
     }
 
     // Will return the equation of the cell
-    function guessEquation(cell){
+    function guessEquation(cell) {
         var equation = "";
 
         // check if the arrow connecting the children is in or out
@@ -622,8 +622,8 @@ var EquationDialog = function (ui, cell) {
     }
 
 
-    // only add the equation if the cell contains an _equation parameter
-    if (cell.getAttribute('_equation') != null) {
+    // add the equation for the types that need it
+    if (cell.getAttribute('_pysd_type') == 'IntegStructure' || cell.getAttribute('_pysd_type') == 'AbstractElement') {
         var equationTitleDiv = document.createElement('div');
         // set title string
         var equationTitle = document.createElement('h3');

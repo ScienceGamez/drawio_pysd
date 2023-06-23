@@ -285,7 +285,7 @@ if __name__ == "__main__":
 
     if args.abs:
         abs_file = file_path.with_name(file_path.name + ".abs")
-        with open(abs_file, "w") as f:
+        with open(abs_file, "w", encoding="utf-8") as f:
             # add a header to explain what is in the file
             f.write(
                 f"# This file contains the PySD abstract model of the file {file_path}\n"
@@ -318,12 +318,9 @@ if __name__ == "__main__":
                     if param not in results_df.columns:
                         logger.warning(f'Parameter {param} not in the simulation outputs')
                         continue
-                    ax.plot(x, results_df[param], label=param)
-                # Plot the different param list on different axes
-                ax.legend()
-                ax = ax.twinx()
+                    ax.plot(x, results_df[param], label=f"{param}")
             # Supress the last created ax that is useless
-            del ax
+            ax.legend()
             plt.show()
     else:
         if args.plot_params:
