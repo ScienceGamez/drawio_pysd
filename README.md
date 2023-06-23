@@ -89,7 +89,7 @@ You find the exectuable there:
 
 Then launch it with the option:
 
-`drawio.exe --enable-plugins`
+`draw.io.exe --enable-plugins`
 
 ### Enabling plugins on the website diagrams.net
 
