@@ -9,6 +9,24 @@ from pysd.translators.structures import abstract_expressions
 logger = logging.getLogger("drawio_pysd.equations_parsing")
 
 
+def var_name_to_safe_name(var_name: str) -> str:
+    """Convert a variable name to a safe name for pysd.
+    
+    This should not be necessary if one would argue that each model
+    builder would be responsible for making the names safe.
+
+    But PySD people did not want to do that: 
+    https://github.com/SDXorg/pysd/pull/399
+
+    So now the abstract model has variable names and 'safe' names in 
+    the reference structures.
+    """
+
+    # Replace spaces with underscores and lower
+    safe_name = var_name.replace(" ", "_").lower()
+
+    return safe_name
+
 def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
     """Convert the equation from the string to the abstract expression."""
 
@@ -39,7 +57,9 @@ def equation_2_ast(equation: str) -> abstract_expressions.ArithmeticStructure:
             return float(splitted[0])
         # If the equation is a variable, return the variable
         elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*$", splitted[0]):
-            return abstract_expressions.ReferenceStructure(splitted[0])
+            # Need to replace spaces by uderscores
+            safe_var = var_name_to_safe_name(splitted[0])
+            return abstract_expressions.ReferenceStructure(safe_var)
         # If the equation is a function, return the function
         # inside the function parenthesis, there can be anything, also special characters
         elif re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*\([a-zA-Z0-9_*_ _\-_/_^()+,]*\)$", splitted[0]):
