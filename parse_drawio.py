@@ -15,7 +15,8 @@ from pysd.translators.structures import abstract_expressions, abstract_model
 from pysd.builders.python.python_model_builder import ModelBuilder
 
 
-from equations_parsing import equation_2_ast, var_name_to_safe_name
+from drawio_pysd.equations_parsing import equation_2_ast, var_name_to_safe_name
+from drawio_pysd.custom_asts import LinearDependencyStructure
 
 
 ElementId = NewType("ElementId", str)
@@ -168,6 +169,12 @@ class PysdElementsHandler(ContentHandler):
                 )
 
                 return ast
+            case "LinearDependencyStructure":
+                return LinearDependencyStructure(
+                    initial=equation_2_ast(attrs.getValueByQName("_initial")),
+                    variable=equation_2_ast(equation),
+                )
+
             case _:
                 raise NotImplementedError(f"pysd_type '{pysd_type}' not implemented.")
 
