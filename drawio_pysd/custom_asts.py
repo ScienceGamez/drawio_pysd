@@ -42,10 +42,10 @@ class LinearDependency(Stateful):
     def initialize(self, init_val=None):
 
         if init_val is None:
-            init_val = self.variable_func() 
+            init_val = self.init_func() 
 
         # Get ratio from the intial conditions
-        self._ratio = init_val / self.init_func()
+        self._ratio = init_val / self.variable_func()
         self.state = self._ratio * self.variable_func()
 
         if isinstance(self.state, xr.DataArray):
