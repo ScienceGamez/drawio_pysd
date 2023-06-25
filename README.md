@@ -128,6 +128,13 @@ This is useful to understand how drawio works if one wants to modify something.
 
 Create a symbolic link to the plugin file in the drawio plugin folder, so you don't need to load it every time.
 
+On Windows only hardlinks work: 
+Open cmd prompt as administrator and run:
+
+```
+mklink /H "C:\Users\ *username* \AppData\Roaming\draw.io\plugins\pysd.js" "path\to\pysd.js"
+```
+
 ### Detailed How it works
 
 Draw.io has *Data* parameters that can be assigned to each shape.
