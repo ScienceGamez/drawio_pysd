@@ -164,6 +164,10 @@ Draw.loadPlugin(function (ui) {
                 ui.sidebar.graph.setAttributeForCell(cell, '_pysd_type', 'Reference');
                 return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Reference to Variable');
             })),
+            ui.sidebar.addEntry('pysd template', mxUtils.bind(ui.sidebar, function () {
+                var cell = createPysdCell('LinearDependencyStructure', 'a * x', true, true);
+                return ui.sidebar.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Linear Dependency');
+            })),
             //ui.sidebar.createVertexTemplateFromCells([createPysdCell()], cell.geometry.width, cell.geometry.height, 'Variable'),
         ]
         ui.sidebar.addPaletteFunctions('pysd', 'PySD', true, fns)
@@ -537,16 +541,22 @@ var EquationDialog = function (ui, cell) {
     // If the cell is of a type that need an inital value,
     // create a text area for editing the _initial value
     var initialArea = document.createElement('textarea');
+    var pysdType = value.getAttribute('_pysd_type');
+    // List of variables that need an initial value
+    var variablesWithInitial = [
+        'IntegStructure', 
+        'AbstractUnchangeableConstant', 
+        'ControlVar',
+        'LinearDependencyStructure',
+    ];
     if (
-        value.getAttribute('_pysd_type') == 'IntegStructure'
-        || value.getAttribute('_pysd_type') == 'AbstractUnchangeableConstant'
-        || value.getAttribute('_pysd_type') == 'ControlVar'
+        variablesWithInitial.includes(pysdType) 
     ) {
         var initialAreaDiv = document.createElement('div');
         // add a title in the div
         var initialAreaTitle = document.createElement('h3');
 
-        if (value.getAttribute('_pysd_type') == 'IntegStructure') {
+        if (pysdType == 'IntegStructure' || pysdType == 'LinearDependencyStructure') {
             initialAreaTitle.innerHTML = "Initial Value";
         } else {
             initialAreaTitle.innerHTML = "Value";
@@ -623,15 +633,24 @@ var EquationDialog = function (ui, cell) {
 
 
     // add the equation for the types that need it
-    if (cell.getAttribute('_pysd_type') == 'IntegStructure' || cell.getAttribute('_pysd_type') == 'AbstractElement') {
+    var needEquation = [
+        'IntegStructure',
+        'AbstractElement',
+        'LinearDependencyStructure',
+    ];
+    if (needEquation.includes(pysdType)) {
         var equationTitleDiv = document.createElement('div');
         // set title string
         var equationTitle = document.createElement('h3');
         equationTitle.innerHTML = "Equation";
         equationTitleDiv.appendChild(equationTitle);
 
+        if (pysdType == 'LinearDependencyStructure') {
+            equationTitle.innerHTML = "Dependency";
+        }
+
         // if Integ, we want to have a guess button to guess what is the equation
-        if (value.getAttribute('_pysd_type') == 'IntegStructure') {
+        if (pysdType == 'IntegStructure') {
             equationTitle.innerHTML = "Flux";
 
             var guessButton = document.createElement('button');
@@ -641,6 +660,8 @@ var EquationDialog = function (ui, cell) {
             }
             equationTitleDiv.appendChild(guessButton);
         }
+
+        
 
 
         // set initial value in the equation area
