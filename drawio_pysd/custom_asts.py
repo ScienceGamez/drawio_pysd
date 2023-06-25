@@ -115,7 +115,6 @@ class LinearDependencyBuilder(StructureBuilder):
             The built object.
 
         """
-        print(arguments)
         self.component.type = "Auxiliary"
         self.component.subtype = "LinearDependency"
 
