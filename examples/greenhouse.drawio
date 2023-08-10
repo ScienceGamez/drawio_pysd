@@ -1,10 +1,10 @@
-<mxfile host="Electron" modified="2023-06-23T15:04:05.741Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.6.2 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36" etag="56aU7p2gw02T4JJUc-wi" compressed="false" version="20.6.2" type="device">
+<mxfile host="Electron" modified="2023-08-10T20:13:49.601Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.6.2 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36" etag="kmUBuWDWIrrEzNeHUgMr" compressed="false" version="20.6.2" type="device">
   <diagram id="pysd_drawio_sectionmy_model" name="my_model">
-    <mxGraphModel dx="3045" dy="1424" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3814" dy="1712" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <UserObject label="%Name%" placeholders="1" Name="Initial Time" Doc="Pre industrial time" Unit="y" _initial="1850" _pysd_type="ControlVar" _equation="" id="pysddrawio-element-0">
+        <UserObject label="%Name%" placeholders="1" Name="Initial Time" Doc="Pre industrial time" Unit="y" _initial="1750" _pysd_type="ControlVar" _equation="" id="pysddrawio-element-0">
           <mxCell style="fillColor=#FFFFFF;" parent="1" vertex="1">
             <mxGeometry x="25" y="170" width="100" height="50" as="geometry" />
           </mxCell>
@@ -32,7 +32,10 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Athmospheric CO2" Doc="Quantity of CO2 in the athmosphere" Unit="GtC" _initial="Initial Athmospheric CO2" _equation="Vegetation To Athmosphere CO2 + Soil To Athmosphere CO2 - Athmosphere To Vegetation CO2 - Athmosphere To Upper Ocean CO2 +  Total Human Emissions " _pysd_type="IntegStructure" id="pysddrawio-element-6">
+        <mxCell id="nml4sl0TPDIv7QjSCLen-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.667;entryY=0.143;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="pysddrawio-element-6" target="nml4sl0TPDIv7QjSCLen-20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Athmospheric CO2" Doc="Quantity of CO2 in the athmosphere" Unit="GtC" _initial="Initial Athmospheric CO2" _equation="Vegetation To Athmosphere CO2  - Athmosphere To Vegetation CO2 - Athmosphere To Upper Ocean CO2 +  Total Human Emissions -  Weathering Athmospheric " _pysd_type="IntegStructure" id="pysddrawio-element-6">
           <mxCell style="fillColor=#C2C2C2;" parent="1" vertex="1">
             <mxGeometry x="-387.5" y="444.13" width="300" height="115.25" as="geometry" />
           </mxCell>
@@ -41,9 +44,6 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="pysddrawio-edge-pysddrawio-element-6-athmosphere_to_vegetation_CO2" parent="1" source="pysddrawio-element-17" target="pysddrawio-element-6" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-6-soil_to_athmosphere_CO2" parent="1" source="pysddrawio-element-20" target="pysddrawio-element-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="pysddrawio-edge-pysddrawio-element-6-vegetation_to_athmosphere_CO2" parent="1" source="pysddrawio-element-18" target="pysddrawio-element-6" edge="1">
@@ -60,7 +60,7 @@
         <mxCell id="pysddrawio-edge-pysddrawio-element-29-athmospheric_CO2" parent="1" source="pysddrawio-element-6" target="pysddrawio-element-29" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="zKRX4OInFKanUc5N_s94-9" value="Ocean" style="swimlane;startSize=21;fillColor=#dae8fc;strokeColor=#6c8ebf;gradientColor=#8B8BFC;gradientDirection=west;" parent="1" vertex="1">
+        <mxCell id="zKRX4OInFKanUc5N_s94-9" value="n" style="swimlane;startSize=21;fillColor=#dae8fc;strokeColor=#6c8ebf;gradientColor=#8B8BFC;gradientDirection=west;" parent="1" vertex="1">
           <mxGeometry x="-1330" y="320" width="860" height="760" as="geometry">
             <mxRectangle x="-1110" y="388.75" width="80" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -72,10 +72,10 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-8" target="s2scJDhKUIBuhn0Kwmn--15">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-8" target="s2scJDhKUIBuhn0Kwmn--15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Upper Ocean CO2" Doc="Quantity of CO2 in the upper part of the ocean" Unit="GtC" _initial="900" _equation="Athmosphere To Upper Ocean CO2 - Upper Ocean To Lower Ocean CO2 -  Ratio Marine Biota Decomposition Lower *  Marine Biota C Exchange " _pysd_type="IntegStructure" id="pysddrawio-element-8">
+        <UserObject label="%Name%" placeholders="1" Name="Upper Ocean CO2" Doc="Quantity of CO2 in the upper part of the ocean" Unit="GtC" _initial="1000" _equation="Athmosphere To Upper Ocean CO2 - Upper Ocean To Lower Ocean CO2 -  Ratio Marine Biota Decomposition Lower *  Marine Biota C Exchange +  Wheathering Total " _pysd_type="IntegStructure" id="pysddrawio-element-8">
           <mxCell style="fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="190" y="244.99" width="150" height="59.76" as="geometry" />
           </mxCell>
@@ -115,7 +115,7 @@
             <mxGeometry x="345" y="321.37" width="40" height="24.75" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="A" Doc="ratio of atmosphere to ocean concentration at equilibrium, which is weakly dependent ontemperature: a warmer ocean holds less dissolved CO2" Unit="-" _equation="K H * Am / (Om / ( delta + 1))" _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-36">
+        <UserObject label="%Name%" placeholders="1" Name="A" Doc="ratio of atmosphere to ocean concentration at equilibrium, which is weakly dependent on temperature: a warmer ocean holds less dissolved CO2" Unit="-" _equation="K H * Am / (Om / ( delta + 1))" _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-36">
           <mxCell style="fillColor=#FFFFFF;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="500" y="420.12" width="45" height="30.25" as="geometry" />
           </mxCell>
@@ -187,10 +187,10 @@
             <mxGeometry x="360" y="104.75" width="60" height="19.75" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-37" target="s2scJDhKUIBuhn0Kwmn--15">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-37" target="s2scJDhKUIBuhn0Kwmn--15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-37" target="pysddrawio-element-12">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-37" target="pysddrawio-element-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="ratio dissolved CO2 inorganic " Doc="ratio of dissolved CO2 total ocean inorganic carbon at equilibrium, a strong function of aciditymore acidic seawater stores less inorganic carbon. Variation in B in particular alters uptakerates dramatically.&#xa;&#xa;Equation 8 of https://sci-hub.se/https://link.springer.com/article/10.1007/s10584-014-1224-y" Unit="-" _equation="1.0 / (1.0 +( K 1 / H Conc) +( K 1 * K 2 / H Conc ^ 2))" _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-37">
@@ -201,7 +201,7 @@
         <mxCell id="nwHB4C_KlUpbsb4T8HCU-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-34" target="pysddrawio-element-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-34" target="s2scJDhKUIBuhn0Kwmn--15">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-34" target="s2scJDhKUIBuhn0Kwmn--15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="K 1" Doc="dissociation constant" _pysd_type="AbstractUnchangeableConstant" Unit="mol/kg" _initial="8e-07" id="pysddrawio-element-34">
@@ -212,7 +212,7 @@
         <mxCell id="nwHB4C_KlUpbsb4T8HCU-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-35" target="pysddrawio-element-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-35" target="s2scJDhKUIBuhn0Kwmn--15">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="pysddrawio-element-35" target="s2scJDhKUIBuhn0Kwmn--15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="K 2" Doc="dissociation constant" _pysd_type="AbstractUnchangeableConstant" Unit="mol/kg" _initial="4.53e-10" _equation="" id="pysddrawio-element-35">
@@ -220,10 +220,10 @@
             <mxGeometry x="430" y="150" width="40" height="27.87" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="nwHB4C_KlUpbsb4T8HCU-6" target="s2scJDhKUIBuhn0Kwmn--15">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="nwHB4C_KlUpbsb4T8HCU-6" target="s2scJDhKUIBuhn0Kwmn--15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Alkalinity" Doc="" Units="GtC" _initial="767.0" _pysd_type="AbstractUnchangeableConstant" _equation="" id="nwHB4C_KlUpbsb4T8HCU-6">
+        <UserObject label="%Name%" placeholders="1" Name="Alkalinity" Doc="" Units="GtC" _initial="747" _pysd_type="AbstractUnchangeableConstant" _equation="" id="nwHB4C_KlUpbsb4T8HCU-6">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="350" y="50" width="80" height="20" as="geometry" />
           </mxCell>
@@ -258,7 +258,7 @@
         <mxCell id="nwHB4C_KlUpbsb4T8HCU-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="nwHB4C_KlUpbsb4T8HCU-6" target="pysddrawio-element-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Ocean Sedimented" Doc="CO2 sedimented in the ocean" Units="GtC" _initial="150" _equation="Sedimentation of CO2" _pysd_type="IntegStructure" id="nwHB4C_KlUpbsb4T8HCU-11">
+        <UserObject label="%Name%" placeholders="1" Name="Ocean Sedimented" Doc="CO2 sedimented in the ocean" Units="GtC" _initial="1750" _equation="Sedimentation of CO2" _pysd_type="IntegStructure" id="nwHB4C_KlUpbsb4T8HCU-11">
           <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="82.5" y="700" width="125" height="50" as="geometry" />
           </mxCell>
@@ -288,77 +288,83 @@
             <mxGeometry x="250" y="620" width="100" height="30" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--1" target="s2scJDhKUIBuhn0Kwmn--2">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--1" target="s2scJDhKUIBuhn0Kwmn--2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="Marine Biota" Doc="Marnine life (i Guess)&#xa;As I understand, the marine life is consuming carbon to grow up in the upper ocean, Then a part of this carbon is transferd to the lower ocean because of some processes" Units="GtC" _initial="3" _equation="0" _pysd_type="IntegStructure" id="s2scJDhKUIBuhn0Kwmn--1">
-          <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="zKRX4OInFKanUc5N_s94-9">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="10" y="370.12" width="115" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--2" target="pysddrawio-element-9">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--2" target="pysddrawio-element-9" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--2" target="pysddrawio-element-8">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--2" target="pysddrawio-element-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="Marine Biota C Exchange" Doc="" Units="GtC/y" _equation=" Marine Biota * Biota exchanged ratio " _pysd_type="AbstractElement" _initial="" id="s2scJDhKUIBuhn0Kwmn--2">
-          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" vertex="1" parent="zKRX4OInFKanUc5N_s94-9">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="127.5" y="439.75" width="80" height="30" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--5" target="pysddrawio-element-9">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--5" target="pysddrawio-element-9" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--5" target="pysddrawio-element-8">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--5" target="pysddrawio-element-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="Ratio Marine Biota Decomposition Lower" Doc="The ratio of marine biota decomposition that falls in the lower ocean part" Units="-" _initial="0.22" _pysd_type="AbstractUnchangeableConstant" _equation="" id="s2scJDhKUIBuhn0Kwmn--5">
-          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="zKRX4OInFKanUc5N_s94-9">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="35" y="484.75" width="85" height="65.25" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--11" target="s2scJDhKUIBuhn0Kwmn--2">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--11" target="s2scJDhKUIBuhn0Kwmn--2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="Biota exchanged ratio" Doc="The ratio of the total biota that is exchanged with the ocean (it is estimated based on the ipcc picture)" Units="-" _initial="16.67" _pysd_type="AbstractUnchangeableConstant" _equation="" id="s2scJDhKUIBuhn0Kwmn--11">
-          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="zKRX4OInFKanUc5N_s94-9">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="82.5" y="304.75" width="102" height="30" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="s2scJDhKUIBuhn0Kwmn--21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--15" target="pysddrawio-element-12">
+        <mxCell id="s2scJDhKUIBuhn0Kwmn--21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-9" source="s2scJDhKUIBuhn0Kwmn--15" target="pysddrawio-element-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="H conc Delta" Doc="The Delta of the second order equation for getting H conc" Units="-" _equation=" K 1 ^ 2  * ( Alkalinity / Upper Ocean CO2 -1) ^ 2 - 4* K 1 * K 2 * ( Alkalinity /  Upper Ocean CO2  ) * (  Alkalinity /  Upper Ocean CO2 - 2 )" _pysd_type="AbstractElement" _initial="" id="s2scJDhKUIBuhn0Kwmn--15">
-          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="zKRX4OInFKanUc5N_s94-9">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="zKRX4OInFKanUc5N_s94-9" vertex="1">
             <mxGeometry x="305" y="177" width="80" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="zKRX4OInFKanUc5N_s94-10" value="Soil and Vegetation" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;gradientDirection=east;gradientColor=#FFCE9F;" parent="1" vertex="1">
-          <mxGeometry x="80" y="310" width="670" height="530" as="geometry">
+          <mxGeometry x="10" y="340" width="670" height="660" as="geometry">
             <mxRectangle x="80" y="310" width="150" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Vegetation CO2" Doc="Quantity of CO2 stored in the surface Vegetation" Unit="kg" _initial="20" _equation="Athmosphere To Vegetation CO2 - Vegetation To Soil CO2" _pysd_type="IntegStructure" id="pysddrawio-element-10">
+        <UserObject label="%Name%" placeholders="1" Name="Vegetation CO2" Doc="Quantity of CO2 stored in the surface Vegetation" Unit="GtC" _initial="450" _equation="Athmosphere To Vegetation CO2 - Vegetation To Soil CO2 -  Vegetation To Athmosphere CO2 " _pysd_type="IntegStructure" id="pysddrawio-element-10">
           <mxCell style="fillColor=#d5e8d4;strokeColor=#82b366;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="470" y="148.75" width="180" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="Soil CO2" Doc="Quantity of CO2 stored in the soil" Unit="kg" _initial="20" _equation="Vegetation To Soil CO2 - Soil To Athmosphere CO2" _pysd_type="IntegStructure" id="pysddrawio-element-11">
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-6" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-11" target="PBs-QWGJntuHzJPmtWAm-5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="320" y="495" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Soil CO2" Doc="Quantity of CO2 stored in the soil" Unit="GtC" _initial="1700" _equation="Vegetation To Soil CO2 - Weathering Soil " _pysd_type="IntegStructure" id="pysddrawio-element-11">
           <mxCell style="fillColor=#ffe6cc;strokeColor=#d79b00;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="470" y="470" width="170" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="Vegetation To Soil CO2" Doc="Transfer of CO2 from Vegetation to soil" Unit="kg/year" _equation="Vegetation Decay To Soil Ratio * Vegetation Decay Ratio * Vegetation CO2" _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-19">
+        <UserObject label="%Name%" placeholders="1" Name="Vegetation To Soil CO2" Doc="Transfer of CO2 from Vegetation to soil" Unit="GtC/year" _equation="Vegetation Decay To Soil Ratio *  Vegetation Decay " _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-19">
           <mxCell style="shape=singleArrow;direction=south;arrowWidth=0.3523809523809524;arrowSize=0.2;fillColor=#d5e8d4;gradientDirection=east;gradientColor=#FFCE9F;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="507.5" y="260" width="105" height="180" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="Soil To Athmosphere CO2" Doc="Transfer of CO2 from soil to athmosphere" Unit="kg/year" _equation="Soil CO2 * Soil To Athmoshere Ratio" _pysd_type="AbstractElement" id="pysddrawio-element-20">
-          <mxCell style="shape=singleArrow;direction=west;rotation=20;gradientColor=#C2C2C2;gradientDirection=east;fillColor=#FFCE9F;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
-            <mxGeometry x="68.79" y="346.84" width="220" height="85" as="geometry" />
-          </mxCell>
-        </UserObject>
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-25" target="pysddrawio-element-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-25" target="pysddrawio-element-19" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <UserObject label="%Name%" placeholders="1" Name="Vegetation Decay" Doc="net primary production by terrestrial plants" Unit="kg/year" _equation="Vegetation CO2 * Vegetation Decay Ratio" id="pysddrawio-element-25">
           <mxCell style="fillColor=#FFFFFF;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="360" y="230" width="110" height="30" as="geometry" />
@@ -367,11 +373,6 @@
         <UserObject label="%Name%" placeholders="1" Name="Vegetation Decay Ratio" Doc="proportion of Vegetation that decays" Unit="-" _pysd_type="AbstractUnchangeableConstant" _initial="0.087" id="pysddrawio-element-26">
           <mxCell style="fillColor=#FFFFFF;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="360" y="290" width="140" height="30" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="Soil To Athmoshere Ratio" Doc="proportion of the soil carbon that goes in athmosphere" Unit="-" _pysd_type="AbstractUnchangeableConstant" _initial="0.6" id="pysddrawio-element-28">
-          <mxCell style="fillColor=#FFFFFF;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
-            <mxGeometry x="102.88" y="460" width="151.81" height="30" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="%Name%" placeholders="1" Name="Vegetation Production" Doc="net primary production by terrestrial plants" Unit="GtC/year" _equation="Initial Vegetation Production *( 1 - A_2 * (Athmospheric CO2 - Initial Athmospheric CO2))" _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-29">
@@ -384,7 +385,7 @@
             <mxGeometry x="440" y="90" width="155" height="30" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="A_2" Doc="constant of Vegetation" Unit="mol/kg" _initial="0.00047" _pysd_type="AbstractUnchangeableConstant" _equation="" id="pysddrawio-element-31">
+        <UserObject label="%Name%" placeholders="1" Name="A_2" Doc="constant of Vegetation" Unit="-/GtC" _initial="0.00047" _pysd_type="AbstractUnchangeableConstant" _equation="" id="pysddrawio-element-31">
           <mxCell style="fillColor=#FFFFFF;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="467.5" y="40" width="40" height="29.38" as="geometry" />
           </mxCell>
@@ -398,31 +399,10 @@
         <mxCell id="pysddrawio-edge-pysddrawio-element-11-vegetation_to_soil_CO2" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-19" target="pysddrawio-element-11" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-11-soil_to_athmosphere_CO2" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-20" target="pysddrawio-element-11" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="pysddrawio-edge-pysddrawio-element-17-vegetation_production" style="entryX=0;entryY=0;entryDx=80;entryDy=25.375;entryPerimeter=0;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-29" target="pysddrawio-element-17" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-18-vegetation_CO2" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-10" target="pysddrawio-element-18" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-18-vegetation_decay_ratio" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-26" target="pysddrawio-element-18" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-19-vegetation_CO2" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-10" target="pysddrawio-element-19" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="pysddrawio-edge-pysddrawio-element-19-vegetation_decay_to_soil_ratio" style="entryX=0.656;entryY=0.681;entryDx=0;entryDy=0;entryPerimeter=0;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-27" target="pysddrawio-element-19" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-19-vegetation_decay_ratio" style="entryX=0.278;entryY=0.662;entryDx=0;entryDy=0;entryPerimeter=0;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-26" target="pysddrawio-element-19" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-20-soil_CO2" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-11" target="pysddrawio-element-20" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="pysddrawio-edge-pysddrawio-element-20-soil_to_athmoshere_ratio" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-28" target="pysddrawio-element-20" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="pysddrawio-edge-pysddrawio-element-25-vegetation_CO2" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-10" target="pysddrawio-element-25" edge="1">
@@ -437,17 +417,24 @@
         <mxCell id="pysddrawio-edge-pysddrawio-element-29-vegetation_production_0" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-30" target="pysddrawio-element-29" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Athmosphere To Vegetation CO2" Doc="Transfer of CO2 from athmosphere to Vegetation" Unit="kg/year" _pysd_type="AbstractElement" _equation=" Vegetation Production " _initial="" id="pysddrawio-element-17">
+        <UserObject label="%Name%" placeholders="1" Name="Athmosphere To Vegetation CO2" Doc="Transfer of CO2 from athmosphere to Vegetation" Unit="GtC/year" _pysd_type="AbstractElement" _equation=" Vegetation Production " _initial="" id="pysddrawio-element-17">
           <mxCell style="shape=singleArrow;gradientColor=#B9E0A5;fillColor=#C2C2C2;gradientDirection=east;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="155" y="134.13" width="200" height="72.5" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="Vegetation To Athmosphere CO2" Doc="Transfer of CO2 from Vegetation to athmosphere" Unit="kg/year" _equation="(1 - Vegetation Decay To Soil Ratio) * Vegetation Decay Ratio * Vegetation CO2" _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-18">
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-18" target="pysddrawio-element-10" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Vegetation To Athmosphere CO2" Doc="Transfer of CO2 from Vegetation to athmosphere.&#xa;(Respiration and Detritus decomposition)" Unit="GtC/year" _equation="(1 - Vegetation Decay To Soil Ratio) *  Vegetation Decay " _pysd_type="AbstractElement" _initial="" id="pysddrawio-element-18">
           <mxCell style="shape=singleArrow;direction=west;gradientColor=#B9E0A5;fillColor=#C2C2C2;gradientDirection=west;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
-            <mxGeometry x="115" y="200" width="210" height="60" as="geometry" />
+            <mxGeometry x="100" y="200" width="225" height="90" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="%Name%" placeholders="1" Name="Vegetation Decay To Soil Ratio" Doc="proportion from the decaying Vegetation that goes to the soil" Unit="-" _pysd_type="AbstractUnchangeableConstant" _initial="0.6" id="pysddrawio-element-27">
+        <UserObject label="%Name%" placeholders="1" Name="Vegetation Decay To Soil Ratio" Doc="proportion from the decaying Vegetation that goes to the soil" Unit="-" _pysd_type="AbstractUnchangeableConstant" _initial="0.0001" _equation="" id="pysddrawio-element-27">
           <mxCell style="fillColor=#FFFFFF;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
             <mxGeometry x="270" y="340" width="180" height="30" as="geometry" />
           </mxCell>
@@ -455,20 +442,33 @@
         <mxCell id="pysddrawio-edge-pysddrawio-element-18-vegetation_decay_to_soil_ratio" parent="zKRX4OInFKanUc5N_s94-10" source="pysddrawio-element-27" target="pysddrawio-element-18" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Weathering Athmospheric" Doc="Wheathering of athmospheric CO2 into rivers" Units="GtC/y" _equation=" Athmospheric CO2 " _pysd_type="LinearDependencyStructure" _initial="0.2" id="nml4sl0TPDIv7QjSCLen-20">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
+            <mxGeometry x="40" y="395" width="75" height="35" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zKRX4OInFKanUc5N_s94-10" source="PBs-QWGJntuHzJPmtWAm-5" target="pysddrawio-element-11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Weathering Soil" Doc="Wheathering of soil CO2 into rivers" Units="GtC/y" _equation=" Soil CO2 " _pysd_type="LinearDependencyStructure" _initial="2.5" id="PBs-QWGJntuHzJPmtWAm-5">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="zKRX4OInFKanUc5N_s94-10" vertex="1">
+            <mxGeometry x="340" y="540" width="75" height="35" as="geometry" />
+          </mxCell>
+        </UserObject>
         <UserObject label="%Name%" placeholders="1" Name="Initial Athmospheric CO2" Doc="Initial Quantity of CO2 in the athmosphere" Unit="GtC" _initial="" _pysd_type="AbstractElement" _equation=" Initial Athmospheric CO2 Concentration *  Ratio ppm to GtC " id="pysddrawio-element-7">
           <mxCell style="fillColor=#FFFFFF;" parent="1" vertex="1">
-            <mxGeometry x="-100" y="388.75" width="160" height="30" as="geometry" />
+            <mxGeometry x="-105" y="380.62" width="160" height="30" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="pysddrawio-edge-pysddrawio-element-29-initial_athmospheric_CO2" parent="1" source="pysddrawio-element-7" target="pysddrawio-element-29" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="zKRX4OInFKanUc5N_s94-19" value="Human activities" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;gradientDirection=east;strokeColor=#d6b656;" parent="1" vertex="1">
-          <mxGeometry x="-390" y="610" width="300" height="270" as="geometry">
+          <mxGeometry x="-450" y="610" width="300" height="270" as="geometry">
             <mxRectangle x="-390" y="610" width="140" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Emissions CO2" Doc="Emission of Green house Gas from human activities" Unit="GtC/year" _pysd_type="AbstractUnchangeableConstant" _initial="0.5" _equation="" id="pysddrawio-element-4">
+        <UserObject label="%Name%" placeholders="1" Name="Emissions CO2" Doc="Emission of Green house Gas from human activities" Unit="GtC/year" _pysd_type="AbstractUnchangeableConstant" _initial="0.0" _equation="" id="pysddrawio-element-4">
           <mxCell style="fillColor=#FFF2CC;strokeColor=#d6b656;" parent="zKRX4OInFKanUc5N_s94-19" vertex="1">
             <mxGeometry x="33.75" y="180" width="100" height="50" as="geometry" />
           </mxCell>
@@ -495,8 +495,8 @@
         <mxCell id="zKRX4OInFKanUc5N_s94-25" value="" style="shape=image;image=https://raw.githubusercontent.com/SDXorg/pysd/master/docs/images/PySD_Logo.svg;editable=0;resizable=1;movable=1;rotatable=0;fillColor=#FFF2CC;gradientColor=#C2C2C2;gradientDirection=east;" parent="1" vertex="1">
           <mxGeometry x="-710" y="90" width="90" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="kBvEYZFayFNenOKMjuo3-1" value="&lt;h1&gt;Greenhouse model&lt;/h1&gt;&lt;p&gt;This model was developped based on carbonator.org&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="-620" y="90" width="270" height="100" as="geometry" />
+        <mxCell id="kBvEYZFayFNenOKMjuo3-1" value="&lt;h1&gt;Greenhouse model&lt;/h1&gt;&lt;p&gt;This model was developped based on different sources:&amp;nbsp;&lt;/p&gt;&lt;p&gt;- ipcc carbon cycle&amp;nbsp;&lt;a href=&quot;https://www.ipcc.ch/report/ar6/wg1/figures/chapter-5/figure-5-12/&quot;&gt;https://www.ipcc.ch/report/ar6/wg1/figures/chapter-5/figure-5-12/&amp;nbsp;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- carbonator.org&lt;/span&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-620" y="30" width="400" height="140" as="geometry" />
         </mxCell>
         <mxCell id="kBvEYZFayFNenOKMjuo3-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="kBvEYZFayFNenOKMjuo3-2" target="kBvEYZFayFNenOKMjuo3-3" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -735,7 +735,7 @@
         <mxCell id="oy1snoEaVPCmk3zSV_ph-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="oy1snoEaVPCmk3zSV_ph-6" target="pysddrawio-element-7" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Ratio ppm to GtC" Doc="The conversion ratio from ppm to GtC of CO2&#xa;https://atmos.washington.edu/academics/classes/2001Q4/211/notes_humancarbon.html" Unit="GtC" _initial="2.08" _pysd_type="AbstractUnchangeableConstant" _equation="" id="oy1snoEaVPCmk3zSV_ph-6">
+        <UserObject label="%Name%" placeholders="1" Name="Ratio ppm to GtC" Doc="The conversion ratio from ppm to GtC of CO2&#xa;https://atmos.washington.edu/academics/classes/2001Q4/211/notes_humancarbon.html" Unit="GtC/ppm" _initial="2.08" _pysd_type="AbstractUnchangeableConstant" _equation="" id="oy1snoEaVPCmk3zSV_ph-6">
           <mxCell style="fillColor=#FFFFFF;" parent="1" vertex="1">
             <mxGeometry x="-425" y="340" width="160" height="30" as="geometry" />
           </mxCell>
@@ -748,11 +748,38 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <UserObject label="%Name%" placeholders="1" Name="Initial Athmospheric CO2 Concentration" Doc="Initial Concentration of CO2 in the athmosphere" Unit="ppm" _initial="280" _pysd_type="AbstractUnchangeableConstant" _equation="" id="oy1snoEaVPCmk3zSV_ph-8">
+        <UserObject label="%Name%" placeholders="1" Name="Initial Athmospheric CO2 Concentration" Doc="Initial Concentration of CO2 in the athmosphere.&#xa;&#xa;https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide" Unit="ppm" _initial="280" _pysd_type="AbstractUnchangeableConstant" _equation="" id="oy1snoEaVPCmk3zSV_ph-8">
           <mxCell style="fillColor=#FFFFFF;" parent="1" vertex="1">
             <mxGeometry x="-170" y="260" width="225" height="30" as="geometry" />
           </mxCell>
         </UserObject>
+        <mxCell id="nml4sl0TPDIv7QjSCLen-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="nml4sl0TPDIv7QjSCLen-1" target="pysddrawio-element-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Wheathering Total" Doc="The CO2 that goes to the oceans trhough wheathering.&#xa;This process happens trhough riveres" Units="GtC/y" _equation=" Weathering Soil +  Weathering Athmospheric " _pysd_type="AbstractElement" _initial="" id="nml4sl0TPDIv7QjSCLen-1">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="1" vertex="1">
+            <mxGeometry x="-170" y="940" width="47" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="nml4sl0TPDIv7QjSCLen-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.533;exitY=0.286;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="PBs-QWGJntuHzJPmtWAm-5" target="nml4sl0TPDIv7QjSCLen-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="195" y="912.5" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.454;entryY=0.38;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="nml4sl0TPDIv7QjSCLen-20" target="nml4sl0TPDIv7QjSCLen-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="PBs-QWGJntuHzJPmtWAm-2" target="nml4sl0TPDIv7QjSCLen-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Weathering Ground" Doc="Constant weathering coming from the ground" Units="GtC/y" _initial="0.2&#xa;" _pysd_type="AbstractUnchangeableConstant" _equation="" id="PBs-QWGJntuHzJPmtWAm-2">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
+            <mxGeometry x="-55" y="1035" width="75" height="35" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="PBs-QWGJntuHzJPmtWAm-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="nml4sl0TPDIv7QjSCLen-20" target="pysddrawio-element-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
