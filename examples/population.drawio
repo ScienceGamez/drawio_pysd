@@ -1,0 +1,154 @@
+<mxfile host="Electron" modified="2024-05-01T21:02:35.491Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.6.2 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36" etag="L6GSfmz7eafqwffpk9jA" compressed="false" version="20.6.2" type="device">
+  <diagram id="UOmS20_O_XFAeOackPY-" name="Page-1">
+    <mxGraphModel dx="1372" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="KpIb-TWSPIWXznllnVsP-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-1" target="KpIb-TWSPIWXznllnVsP-14" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="U1oYJSCTGKS_XVweyN7Q-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="KpIb-TWSPIWXznllnVsP-1" target="KpIb-TWSPIWXznllnVsP-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Population" Doc="" Units="people" _initial="100" _equation=" Births - Deaths" _pysd_type="IntegStructure" id="KpIb-TWSPIWXznllnVsP-1">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="260" y="450" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="%Name%" placeholders="1" Doc="" Units="-" _pysd_type="Sink" Name="" id="KpIb-TWSPIWXznllnVsP-2">
+          <mxCell style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="580" y="450" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-3" value="" style="shape=flexArrow;rounded=0;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-5" target="KpIb-TWSPIWXznllnVsP-1" edge="1">
+          <mxGeometry x="260" y="440" as="geometry">
+            <mxPoint x="450" y="570" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-4" value="" style="shape=flexArrow;rounded=0;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-2" target="KpIb-TWSPIWXznllnVsP-5" edge="1">
+          <mxGeometry x="260" y="440" as="geometry">
+            <mxPoint x="610" y="520" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Births" Doc="" Units="people" _equation=" Birth Rate " _pysd_type="AbstractElement" _initial="" id="KpIb-TWSPIWXznllnVsP-5">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="420" y="440" width="80" height="40" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="%Name%" placeholders="1" Name="INITIAL TIME" Doc="Initial time of the simulation" Units="-" _initial="0" _pysd_type="ControlVar" id="KpIb-TWSPIWXznllnVsP-6">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;" parent="1" vertex="1">
+            <mxGeometry x="190" y="160" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="%Name%" placeholders="1" Name="FINAL TIME" Doc="Final time of the simulation" Units="-" _initial="10" _pysd_type="ControlVar" id="KpIb-TWSPIWXznllnVsP-7">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;" parent="1" vertex="1">
+            <mxGeometry x="270" y="160" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="%Name%" placeholders="1" Name="TIME STEP" Doc="Time step of the simulation" Units="-" _initial="0.25" _pysd_type="ControlVar" id="KpIb-TWSPIWXznllnVsP-8">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;" parent="1" vertex="1">
+            <mxGeometry x="350" y="160" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="%Name%" placeholders="1" Name="SAVEPER" Doc="The frequency with which output is stored." Units="-" _initial="1" _pysd_type="ControlVar" id="KpIb-TWSPIWXznllnVsP-9">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;" parent="1" vertex="1">
+            <mxGeometry x="430" y="160" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-10" target="KpIb-TWSPIWXznllnVsP-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-10" target="KpIb-TWSPIWXznllnVsP-34" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Gender" Doc="" Units="-" _pysd_type="Subscript" _equation="" _initial="" id="KpIb-TWSPIWXznllnVsP-10">
+          <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="60" y="490" width="100" height="120" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-11" value="Male" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="KpIb-TWSPIWXznllnVsP-10" vertex="1">
+          <mxGeometry y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-12" value="Female" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="KpIb-TWSPIWXznllnVsP-10" vertex="1">
+          <mxGeometry y="60" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-13" value="Others" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="KpIb-TWSPIWXznllnVsP-10" vertex="1">
+          <mxGeometry y="90" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-14" target="KpIb-TWSPIWXznllnVsP-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Birth Rate" Doc="" Units="ppl/year" _equation=" Population *  Birth desirability " _pysd_type="AbstractComponent" _initial="" id="KpIb-TWSPIWXznllnVsP-14">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="450" y="350" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-24" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;edgeStyle=orthogonalEdgeStyle;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-15" target="KpIb-TWSPIWXznllnVsP-14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Birth desirability" Doc="Constant that says for a woman who can reporduce how much they will want to" Units="-" _initial="0.3" _pysd_type="AbstractUnchangeableConstant" _equation="" id="KpIb-TWSPIWXznllnVsP-15">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="300" y="290" width="110" height="40" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-16" target="KpIb-TWSPIWXznllnVsP-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-16" target="KpIb-TWSPIWXznllnVsP-15" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="420" />
+              <mxPoint x="230" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-16" target="KpIb-TWSPIWXznllnVsP-34" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Age" Doc="" Units="-" _pysd_type="Subscript" _equation="" _initial="" id="KpIb-TWSPIWXznllnVsP-16">
+          <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="80" y="390" width="100" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-17" value="*" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=13;" parent="KpIb-TWSPIWXznllnVsP-16" vertex="1">
+          <mxGeometry y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Deaths" Doc="" Units="ppl" _equation=" Death Rate " _pysd_type="AbstractElement" _initial="" id="KpIb-TWSPIWXznllnVsP-28">
+          <mxCell style="shape=collate;whiteSpace=wrap;html=1;points=[[0,0,0,0,0],[0,0.5,0,0,0],[0,1,0,0,0],[0.5,0,0,0,0],[0.5,0.5,0,0,0],[0.5,1,0,0,0],[1,0,0,0,0],[1,0.5,0,0,0],[1,1,0,0,0]];labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="260" y="590" width="80" height="35" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-31" value="" style="shape=flexArrow;rounded=0;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-28" target="KpIb-TWSPIWXznllnVsP-1" edge="1">
+          <mxGeometry x="270" y="450" as="geometry">
+            <mxPoint x="430" y="470" as="sourcePoint" />
+            <mxPoint x="350" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KpIb-TWSPIWXznllnVsP-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=13;" parent="1" source="KpIb-TWSPIWXznllnVsP-34" target="KpIb-TWSPIWXznllnVsP-28" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Death Rate" Doc="" Units="ppl/year" _equation=" Population *  Mortality rate " _pysd_type="AbstractComponent" _initial="" id="KpIb-TWSPIWXznllnVsP-34">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontFamily=Verdana;fontSize=13;" parent="1" vertex="1">
+            <mxGeometry x="130" y="650" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="U1oYJSCTGKS_XVweyN7Q-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="U1oYJSCTGKS_XVweyN7Q-1" target="KpIb-TWSPIWXznllnVsP-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="%Name%" placeholders="1" Name="Mortality rate" Doc="" Units="-" _initial="0.1" _pysd_type="AbstractUnchangeableConstant" _equation="" id="U1oYJSCTGKS_XVweyN7Q-1">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
+            <mxGeometry x="190" y="570" width="80" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

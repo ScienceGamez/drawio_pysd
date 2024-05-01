@@ -110,6 +110,8 @@ class PysdElementsHandler(ContentHandler):
 
         try:
             ast = self.create_ast(pysd_type, equation, attrs)
+            if ast is None:
+                return
         except Exception as exp:
             raise ValueError(
                 f"Error while creating the abstract structure"
@@ -128,7 +130,7 @@ class PysdElementsHandler(ContentHandler):
             doc = attrs.getValueByQName("Doc")
         except KeyError:
             doc = ""
-        
+
         # Check that the name is unique in safe_name space
         safe_name = var_name_to_safe_name(name)
         if safe_name in self.safe_names:
@@ -159,7 +161,7 @@ class PysdElementsHandler(ContentHandler):
                     initial=equation_2_ast(attrs.getValueByQName("_initial")),
                     flow=equation_2_ast(equation),
                 )
-            case "AbstractElement":
+            case "AbstractElement" | "AbstractComponent":
                 return equation_2_ast(equation)
             case "AbstractUnchangeableConstant" | "ControlVar":
                 return float(attrs.getValueByQName("_initial"))
@@ -174,7 +176,8 @@ class PysdElementsHandler(ContentHandler):
                     initial=equation_2_ast(attrs.getValueByQName("_initial")),
                     variable=equation_2_ast(equation),
                 )
-
+            case "Sink":
+                return None
             case _:
                 raise NotImplementedError(f"pysd_type '{pysd_type}' not implemented.")
 
