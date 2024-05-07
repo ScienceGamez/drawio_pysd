@@ -326,8 +326,6 @@ if __name__ == "__main__":
     if args.run:
         model = pysd.load(py_file)
         results_df = model.run()
-        print(results_df.columns)
-
         if args.plot_params:
 
             # Plot all the variables in the results
